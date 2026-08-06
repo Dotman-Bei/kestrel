@@ -1,4 +1,4 @@
-# Kestrel — Policy Sentinel
+# Kestrel 
 
 **DataHub's Metadata Tests check one entity at a time. Kestrel checks conditions across the lineage graph** — "does any column tagged `PII` *reach* a BI dashboard, through any multi-hop path, without passing through a masking step?" That question is structurally inexpressible as a per-entity test, and it is the question governance teams actually ask.
 
