@@ -110,7 +110,7 @@ export function PolicyCards() {
       {POLICIES.map((policy, index) => (
         <Reveal key={policy.id} index={index} as="article">
           <article
-            className={`card-lift group relative overflow-hidden ${policy.tone} p-9`}
+            className={`card-lift group relative overflow-hidden ${policy.tone} p-6 min-[560px]:p-8 min-[900px]:p-9`}
             style={{ rotate: `${policy.rotate}deg` }}
             onMouseEnter={(e) => {
               e.currentTarget.style.rotate = `${policy.hoverRotate}deg`;
@@ -121,7 +121,7 @@ export function PolicyCards() {
           >
             <div
               aria-hidden
-              className="absolute right-7 top-7 opacity-90"
+              className="absolute right-5 top-5 opacity-90 min-[560px]:right-7 min-[560px]:top-7"
               style={{ transform: `rotate(${policy.rotate * 3}deg)` }}
             >
               {policy.glyph}
@@ -130,7 +130,7 @@ export function PolicyCards() {
             <p className="eyebrow" style={{ color: "var(--color-signal-deep)" }}>
               {policy.kind}
             </p>
-            <h3 className="mt-4 max-w-[70%] font-display text-[24px] font-extrabold leading-tight tracking-[-0.02em] text-void">
+            <h3 className="mt-4 max-w-[62%] font-display text-[21px] font-extrabold leading-tight tracking-[-0.02em] text-void min-[560px]:max-w-[70%] min-[560px]:text-[24px]">
               {policy.title}
             </h3>
             <p className="mt-3 max-w-[92%] text-[14px] leading-[1.55] text-void/75">{policy.body}</p>

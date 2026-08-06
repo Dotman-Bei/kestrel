@@ -109,14 +109,28 @@ export function ThesisDiagram() {
   }, []);
 
   return (
-    <div className="w-full overflow-x-auto">
-      <svg
-        ref={ref}
-        viewBox="0 0 900 200"
-        className="h-auto w-full min-w-[720px]"
-        role="img"
-        aria-label="A four-hop lineage path from the column patients.ssn through staging, a certified mart and a reporting view, ending at the dashboard patient_overview — flagged as a violation."
+    <div>
+      {/* Below ~760px the diagram cannot shrink further without the hop labels
+          becoming unreadable, so it scrolls instead. An overflow with no
+          affordance reads as a clipped diagram, hence the explicit hint --
+          hidden once the whole thing fits. */}
+      <p
+        aria-hidden
+        className="data-label mb-3 text-left min-[820px]:hidden"
       >
+        Scroll to follow the path &rarr;
+      </p>
+      {/* Full-bleed only while it actually scrolls. Past 820px the diagram fits
+          the content column, so the negative margins reset -- otherwise it
+          would sit wider than the paragraph above it on desktop. */}
+      <div className="-mx-5 w-[calc(100%+40px)] overflow-x-auto px-5 min-[560px]:-mx-6 min-[560px]:w-[calc(100%+48px)] min-[560px]:px-6 min-[820px]:mx-0 min-[820px]:w-full min-[820px]:px-0">
+        <svg
+          ref={ref}
+          viewBox="0 0 900 200"
+          className="h-auto w-full min-w-[700px]"
+          role="img"
+          aria-label="A four-hop lineage path from the column patients.ssn through staging, a certified mart and a reporting view, ending at the dashboard patient_overview — flagged as a violation."
+        >
         <defs>
           {/* userSpaceOnUse is required: these edges are perfectly horizontal,
               so their object bounding box has zero height and an
@@ -247,7 +261,8 @@ export function ThesisDiagram() {
             VIOLATION · 4 HOPS
           </text>
         </g>
-      </svg>
+        </svg>
+      </div>
     </div>
   );
 }

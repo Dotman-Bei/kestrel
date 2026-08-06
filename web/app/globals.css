@@ -58,6 +58,20 @@
 
 /* --------------------------------------------------------------------- base */
 
+/* The hard offset shadows deliberately paint 5-9px outside the element box, and
+   the tilted policy cards sweep a few px wider still. On a phone, where those
+   cards are full-bleed minus a 20px gutter, that spill was enough to open a
+   horizontal scrollbar on the whole document.
+
+   `clip` rather than `hidden`: clip does not establish a scroll container, so
+   the sticky TopBar still sticks to the viewport. `hidden` would make body a
+   scroll container and break it. Only the x axis is constrained -- y stays
+   visible so nothing interferes with normal page scrolling. */
+html,
+body {
+  overflow-x: clip;
+}
+
 body {
   background-color: var(--color-page);
   color: var(--color-text);
@@ -88,7 +102,8 @@ body {
      lands exactly where its shadow was. */
   .btn-press {
     @apply inline-flex items-center justify-center gap-2 rounded-full border-2 border-void
-           px-[30px] py-3.5 font-medium text-void transition-all duration-150
+           px-6 py-3 text-center font-medium text-void transition-all duration-150
+           min-[560px]:px-[30px] min-[560px]:py-3.5
            hover:translate-x-[5px] hover:translate-y-[5px] hover:scale-[0.98]
            focus-visible:ring-2 focus-visible:ring-[var(--color-signal)] focus-visible:ring-offset-2
            focus-visible:ring-offset-[var(--color-page)];
