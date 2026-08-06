@@ -1,0 +1,71 @@
+{
+  "name": "Kestrel — DataHub policy sentinel",
+
+  // Python 3.11 base: Kestrel needs >=3.10, and the DataHub CLI is happiest here.
+  "image": "mcr.microsoft.com/devcontainers/python:3.11-bookworm",
+
+  "features": {
+    // `datahub docker quickstart` shells out to the docker CLI, so the codespace
+    // needs its own daemon. This is the whole reason the devcontainer exists.
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {
+      "moby": true,
+      "dockerDashComposeVersion": "v2"
+    },
+    // web/ is a Next.js app.
+    "ghcr.io/devcontainers/features/node:1": { "version": "lts" },
+    "ghcr.io/devcontainers/features/github-cli:1": {}
+  },
+
+  // DataHub quickstart brings up OpenSearch, Kafka, MySQL, GMS and the frontend.
+  // 8GB is the documented floor for those containers alone, so the 2-core/8GB
+  // machine leaves nothing for the toolchain. Requiring 16GB removes it from the
+  // picker rather than letting a run die halfway through pulling images.
+  "hostRequirements": {
+    "cpus": 4,
+    "memory": "16gb",
+    "storage": "32gb"
+  },
+
+  "forwardPorts": [8080, 9002, 3000],
+  "portsAttributes": {
+    "8080": { "label": "DataHub GMS", "onAutoForward": "silent" },
+    "9002": { "label": "DataHub UI", "onAutoForward": "notify" },
+    "3000": { "label": "Kestrel web report", "onAutoForward": "notify" }
+  },
+
+  "containerEnv": {
+    "DATAHUB_GMS_URL": "http://localhost:8080",
+    // Without this the MCP server hides add_tags / add_structured_properties /
+    // save_document, and the entire write-back layer silently has nothing to call.
+    "TOOLS_IS_MUTATION_ENABLED": "true"
+  },
+
+  // Prompted for on codespace creation and stored encrypted; only the agentic
+  // engine needs it. The deterministic engine runs without any key.
+  "secrets": {
+    "ANTHROPIC_API_KEY": {
+      "description": "Anthropic API key — only needed for `kestrel scan --ask`. Leave blank to skip the agentic engine.",
+      "documentationUrl": "https://console.anthropic.com/settings/keys"
+    }
+  },
+
+  "postCreateCommand": "bash .devcontainer/post-create.sh",
+  "waitFor": "postCreateCommand",
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "charliermarsh.ruff",
+        "redhat.vscode-yaml"
+      ],
+      "settings": {
+        "python.defaultInterpreterPath": "/usr/local/bin/python",
+        "python.testing.pytestEnabled": true
+      }
+    }
+  },
+
+  "remoteUser": "vscode"
+}
