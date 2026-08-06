@@ -28,7 +28,7 @@ const jetbrains = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Kestrel — policy sentinel for your data catalog",
+  title: "Kestrel",
   description:
     "DataHub's Metadata Tests check one entity at a time. Kestrel checks conditions across the lineage graph — and writes the findings back into the catalog.",
 };
