@@ -1,0 +1,23 @@
+# The structured property Kestrel writes for every violation.
+#
+# DataHub requires a structured property to be defined before a value can be set
+# on an entity. Register it once:
+#
+#   datahub properties upsert -f scripts/structured_properties.yaml
+#
+# If you skip this, the tag and document write-back layers still land -- the
+# property layer records the failure on the finding and the scan continues.
+- id: io.kestrel.policy_violation
+  qualified_name: io.kestrel.policy_violation
+  type: string
+  cardinality: MULTIPLE
+  display_name: Kestrel policy violation
+  description: >-
+    A machine-readable violation record written by Kestrel Policy Sentinel:
+    JSON carrying finding_id, policy_id, severity, source_urn, sink_urn, path,
+    hops and detected_at. Queryable by the next agent that walks this graph.
+  entity_types:
+    - urn:li:entityType:datahub.dataset
+    - urn:li:entityType:datahub.schemaField
+    - urn:li:entityType:datahub.dashboard
+    - urn:li:entityType:datahub.chart

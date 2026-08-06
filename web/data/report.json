@@ -1,0 +1,1025 @@
+{
+  "runId": "kestrel-example-run",
+  "mode": "offline",
+  "target": "policies/",
+  "datahubUrl": "http://localhost:9002",
+  "startedAt": "2026-08-06T05:36:58+00:00",
+  "finishedAt": "2026-08-06T05:36:58+00:00",
+  "writebackEnabled": true,
+  "dryRun": false,
+  "summary": {
+    "policies": 4,
+    "violations": 6,
+    "subjectsScanned": 15,
+    "pathsWalked": 18,
+    "bySeverity": {
+      "high": 4,
+      "medium": 2
+    },
+    "writebacks": 26,
+    "writebacksApplied": 22
+  },
+  "results": [
+    {
+      "policyId": "certified-without-owner",
+      "description": "Anything marked Certified or Production must have an owner. Certification without accountability is a promise nobody made.",
+      "severity": "medium",
+      "engine": "template",
+      "subjectsScanned": 3,
+      "pathsWalked": 0,
+      "violationCount": 1,
+      "violations": [
+        {
+          "id": "certified-without-owner-47a9eab9",
+          "policyId": "certified-without-owner",
+          "severity": "medium",
+          "engine": "template",
+          "title": "healthcare.marts.patient_encounters",
+          "message": "healthcare.marts.patient_encounters is marked Certified / Production but has no owner. Nobody is accountable for it.",
+          "subject": {
+            "urn": "urn:li:dataset:(urn:li:dataPlatform:snowflake,healthcare.marts.patient_encounters,PROD)",
+            "type": "dataset",
+            "name": "healthcare.marts.patient_encounters",
+            "platform": "snowflake",
+            "subType": "Table",
+            "tags": [
+              "Certified",
+              "Production",
+              "policy-violation"
+            ],
+            "terms": [],
+            "owners": [],
+            "domain": "urn:li:domain:clinical"
+          },
+          "evidence": [
+            "entity: urn:li:dataset:(urn:li:dataPlatform:snowflake,healthcare.marts.patient_encounters,PROD)",
+            "tags: Certified, Production",
+            "owners: none"
+          ],
+          "queries": [],
+          "owners": [],
+          "remediation": "Assign a technical and a business owner in DataHub, or remove the certification until someone will stand behind it.",
+          "detectedAt": "2026-08-06T05:36:58+00:00",
+          "writebacks": [
+            {
+              "kind": "tag",
+              "target": "urn:li:dataset:(urn:li:dataPlatform:snowflake,healthcare.marts.patient_encounters,PROD)",
+              "detail": "tagged `patient_encounters` with `policy-violation`",
+              "applied": true,
+              "dryRun": false,
+              "payload": {
+                "tag": "policy-violation"
+              }
+            },
+            {
+              "kind": "structured_property",
+              "target": "urn:li:dataset:(urn:li:dataPlatform:snowflake,healthcare.marts.patient_encounters,PROD)",
+              "detail": "recorded `io.kestrel.policy_violation` on `patient_encounters`",
+              "applied": true,
+              "dryRun": false,
+              "payload": {
+                "finding_id": "certified-without-owner-47a9eab9",
+                "policy_id": "certified-without-owner",
+                "severity": "medium",
+                "detected_at": "2026-08-06T05:36:58+00:00",
+                "scan_run": "kestrel-example-run",
+                "engine": "template",
+                "source_urn": "urn:li:dataset:(urn:li:dataPlatform:snowflake,healthcare.marts.patient_encounters,PROD)",
+                "summary": "healthcare.marts.patient_encounters is marked Certified / Production but has no owner. Nobody is accountable for it."
+              }
+            },
+            {
+              "kind": "document",
+              "target": "urn:li:dataset:(urn:li:dataPlatform:snowflake,healthcare.marts.patient_encounters,PROD)",
+              "detail": "authored incident document \"Policy violation: certified-without-owner - healthcare.marts.patient_encounters\"",
+              "applied": true,
+              "dryRun": false,
+              "payload": {
+                "title": "Policy violation: certified-without-owner - healthcare.marts.patient_encounters",
+                "file": "out/examples-scratch/documents/certified-without-owner-47a9eab9.md",
+                "related": [
+                  "urn:li:dataset:(urn:li:dataPlatform:snowflake,healthcare.marts.patient_encounters,PROD)"
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "durationMs": 0,
+      "notes": []
+    },
+    {
+      "policyId": "certified-dashboard-without-owner",
+      "description": "Certified dashboards must have an owner -- they are what executives read.",
+      "severity": "medium",
+      "engine": "template",
+      "subjectsScanned": 3,
+      "pathsWalked": 0,
+      "violationCount": 1,
+      "violations": [
+        {
+          "id": "certified-dashboard-without-owner-3f2ac5ca",
+          "policyId": "certified-dashboard-without-owner",
+          "severity": "medium",
+          "engine": "template",
+          "title": "patient_overview",
+          "message": "patient_overview is marked Certified but has no owner. Nobody is accountable for it.",
+          "subject": {
+            "urn": "urn:li:dashboard:(looker,patient_overview)",
+            "type": "dashboard",
+            "name": "patient_overview",
+            "platform": "looker",
+            "subType": "Dashboard",
+            "tags": [
+              "Certified",
+              "policy-violation"
+            ],
+            "terms": [],
+            "owners": []
+          },
+          "evidence": [
+            "entity: urn:li:dashboard:(looker,patient_overview)",
+            "tags: Certified",
+            "owners: none"
+          ],
+          "queries": [],
+          "owners": [],
+          "remediation": "Assign an owner to the dashboard, or drop its certification.",
+          "detectedAt": "2026-08-06T05:36:58+00:00",
+          "writebacks": [
+            {
+              "kind": "tag",
+              "target": "urn:li:dashboard:(looker,patient_overview)",
+              "detail": "tagged `patient_overview` with `policy-violation`",
+              "applied": true,
+              "dryRun": false,
+              "payload": {
+                "tag": "policy-violation"
+              }
+            },
+            {
+              "kind": "structured_property",
+              "target": "urn:li:dashboard:(looker,patient_overview)",
+              "detail": "recorded `io.kestrel.policy_violation` on `patient_overview`",
+              "applied": true,
+              "dryRun": false,
+              "payload": {
+                "finding_id": "certified-dashboard-without-owner-3f2ac5ca",
+                "policy_id": "certified-dashboard-without-owner",
+                "severity": "medium",
+                "detected_at": "2026-08-06T05:36:58+00:00",
+                "scan_run": "kestrel-example-run",
+                "engine": "template",
+                "source_urn": "urn:li:dashboard:(looker,patient_overview)",
+                "summary": "patient_overview is marked Certified but has no owner. Nobody is accountable for it."
+              }
+            },
+            {
+              "kind": "document",
+              "target": "urn:li:dashboard:(looker,patient_overview)",
+              "detail": "authored incident document \"Policy violation: certified-dashboard-without-owner - patient_overview\"",
+              "applied": true,
+              "dryRun": false,
+              "payload": {
+                "title": "Policy violation: certified-dashboard-without-owner - patient_overview",
+                "file": "out/examples-scratch/documents/certified-dashboard-without-owner-3f2ac5ca.md",
+                "related": [
+                  "urn:li:dashboard:(looker,patient_overview)"
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "durationMs": 0,
+      "notes": []
+    },
+    {
+      "policyId": "pii-reaches-bi",
+      "description": "A column tagged PII must not reach a BI dashboard or chart through any lineage path, unless it passes through a masking, hashing or redaction step.",
+      "severity": "high",
+      "engine": "template",
+      "subjectsScanned": 6,
+      "pathsWalked": 16,
+      "violationCount": 3,
+      "violations": [
+        {
+          "id": "pii-reaches-bi-82fa8982",
+          "policyId": "pii-reaches-bi",
+          "severity": "high",
+          "engine": "template",
+          "title": "healthcare.raw.patients.ssn -> patient_overview",
+          "message": "healthcare.raw.patients.ssn reaches Dashboard/Chart 'patient_overview' via a 4-hop path, with no mask/hash/sha2 (+4 more) step on the way.",
+          "subject": {
+            "urn": "urn:li:schemaField:(urn:li:dataset:(urn:li:dataPlatform:postgres,healthcare.raw.patients,PROD),ssn)",
+            "type": "schemaField",
+            "name": "healthcare.raw.patients.ssn",
+            "platform": "postgres",
+            "subType": "string",
+            "tags": [
+              "PII",
+              "Sensitive",
+              "policy-violation"
+            ],
+            "terms": [],
+            "owners": [
+              "urn:li:corpuser:dana.okoro"
+            ],
+            "domain": "urn:li:domain:clinical"
+          },
+          "sink": {
+            "urn": "urn:li:dashboard:(looker,patient_overview)",
+            "type": "dashboard",
+            "name": "patient_overview",
+            "platform": "looker",
+            "subType": "Dashboard",
+            "tags": [
+              "Certified",
+              "policy-violation"
+            ],
+            "terms": [],
+            "owners": []
+          },
+          "path": {
+            "hops": 4,
+            "nodes": [
+              {
+                "urn": "urn:li:schemaField:(urn:li:dataset:(urn:li:dataPlatform:postgres,healthcare.raw.patients,PROD),ssn)",
+                "type": "schemaField",
+                "name": "healthcare.raw.patients.ssn",
+                "platform": "postgres",
+                "subType": "string",
+                "tags": [
+                  "PII",
+                  "Sensitive",
+                  "policy-violation"
+                ],
+                "terms": [],
+                "owners": [
+                  "urn:li:corpuser:dana.okoro"
+                ],
+                "domain": "urn:li:domain:clinical"
+              },
+              {
+                "urn": "urn:li:schemaField:(urn:li:dataset:(urn:li:dataPlatform:snowflake,healthcare.staging.stg_patients,PROD),ssn)",
+                "type": "schemaField",
+                "name": "healthcare.staging.stg_patients.ssn",
+                "platform": "snowflake",
+                "subType": "string",
+                "tags": [],
+                "terms": [],
+                "owners": [
+                  "urn:li:corpuser:dana.okoro"
+                ]
+              },
+              {
+                "urn": "urn:li:schemaField:(urn:li:dataset:(urn:li:dataPlatform:snowflake,healthcare.marts.patient_encounters,PROD),patient_ssn)",
+                "type": "schemaField",
+                "name": "healthcare.marts.patient_encounters.patient_ssn",
+                "platform": "snowflake",
+                "subType": "string",
+                "tags": [],
+                "terms": [],
+                "owners": [],
+                "domain": "urn:li:domain:clinical"
+              },
+              {
+                "urn": "urn:li:schemaField:(urn:li:dataset:(urn:li:dataPlatform:snowflake,healthcare.analytics.encounter_summary,PROD),patient_ssn)",
+                "type": "schemaField",
+                "name": "healthcare.analytics.encounter_summary.patient_ssn",
+                "platform": "snowflake",
+                "subType": "string",
+                "tags": [],
+                "terms": [],
+                "owners": [
+                  "urn:li:corpuser:priya.raman"
+                ]
+              },
+              {
+                "urn": "urn:li:dashboard:(looker,patient_overview)",
+                "type": "dashboard",
+                "name": "patient_overview",
+                "platform": "looker",
+                "subType": "Dashboard",
+                "tags": [
+                  "Certified",
+                  "policy-violation"
+                ],
+                "terms": [],
+                "owners": []
+              }
+            ],
+            "edges": [
+              {
+                "source": "urn:li:schemaField:(urn:li:dataset:(urn:li:dataPlatform:postgres,healthcare.raw.patients,PROD),ssn)",
+                "target": "urn:li:schemaField:(urn:li:dataset:(urn:li:dataPlatform:snowflake,healthcare.staging.stg_patients,PROD),ssn)",
+                "transform": "passthrough",
+                "query": "INSERT INTO healthcare.staging.stg_patients SELECT patient_id, ssn, full_name FROM healthcare.raw.patients",
+                "level": "column"
+              },
+              {
+                "source": "urn:li:schemaField:(urn:li:dataset:(urn:li:dataPlatform:snowflake,healthcare.staging.stg_patients,PROD),ssn)",
+                "target": "urn:li:schemaField:(urn:li:dataset:(urn:li:dataPlatform:snowflake,healthcare.marts.patient_encounters,PROD),patient_ssn)",
+                "transform": "join on patient_id",
+                "query": "CREATE TABLE healthcare.marts.patient_encounters AS SELECT e.encounter_id, p.ssn AS patient_ssn, e.provider_id, e.encounter_date FROM encounters e JOIN healthcare.staging.stg_patients p USING (patient_id)",
+                "level": "column"
+              },
+              {
+                "source": "urn:li:schemaField:(urn:li:dataset:(urn:li:dataPlatform:snowflake,healthcare.marts.patient_encounters,PROD),patient_ssn)",
+                "target": "urn:li:schemaField:(urn:li:dataset:(urn:li:dataPlatform:snowflake,healthcare.analytics.encounter_summary,PROD),patient_ssn)",
+                "transform": "passthrough into reporting view",
+                "query": "CREATE VIEW healthcare.analytics.encounter_summary AS SELECT patient_ssn, COUNT(*) AS encounters, encounter_date FROM healthcare.marts.patient_encounters GROUP BY patient_ssn, encounter_date",
+                "level": "column"
+              },
+              {
+                "source": "urn:li:schemaField:(urn:li:dataset:(urn:li:dataPlatform:snowflake,healthcare.analytics.encounter_summary,PROD),patient_ssn)",
+                "target": "urn:li:dashboard:(looker,patient_overview)",
+                "transform": "Looker explore: encounter_summary",
+                "level": "table"
+              }
+            ],
+            "rendered": "patients.ssn -> stg_patients.ssn -> patient_encounters.patient_ssn -> encounter_summary.patient_ssn -> patient_overview",
+            "notes": [
+              "column lineage unavailable at this hop; followed table-level lineage"
+            ]
+          },
+          "evidence": [
+            "hop 1: patients.ssn -> stg_patients.ssn\n    transform: passthrough\n    sql: INSERT INTO healthcare.staging.stg_patients SELECT patient_id, ssn, full_name FROM healthcare.raw.patients",
+            "hop 2: stg_patients.ssn -> patient_encounters.patient_ssn\n    transform: join on patient_id\n    sql: CREATE TABLE healthcare.marts.patient_encounters AS SELECT e.encounter_id, p.ssn AS patient_ssn, e.provider_id, e.encounter_date FROM encounters e JOIN healthca",
+            "hop 3: patient_encounters.patient_ssn -> encounter_summary.patient_ssn\n    transform: passthrough into reporting view\n    sql: CREATE VIEW healthcare.analytics.encounter_summary AS SELECT patient_ssn, COUNT(*) AS encounters, encounter_date FROM healthcare.marts.patient_encounters GROUP ",
+            "hop 4: encounter_summary.patient_ssn -> patient_overview  [table-level]\n    transform: Looker explore: encounter_summary",
+            "column lineage unavailable at this hop; followed table-level lineage"
+          ],
+          "queries": [
+            "SELECT ssn, full_name, dob FROM healthcare.raw.patients WHERE created_at > current_date - 30",
+            "SELECT count(*) FROM healthcare.raw.patients"
+          ],
+          "owners": [
+            "urn:li:corpuser:dana.okoro"
+          ],
+          "remediation": "Mask or hash the column at the first transform downstream of the source, or drop it from the downstream model. If the exposure is reviewed and accepted, tag the mitigating step `Masked` so this policy stops reporting the path.",
+          "detectedAt": "2026-08-06T05:36:58+00:00",
+          "writebacks": [
+            {
+              "kind": "tag",
+              "target": "urn:li:schemaField:(urn:li:dataset:(urn:li:dataPlatform:postgres,healthcare.raw.patients,PROD),ssn)",
+              "detail": "tagged `patients.ssn` with `policy-violation`",
+              "applied": true,
+              "dryRun": false,
+              "payload": {
+                "tag": "policy-violation"
+              }
+            },
+            {
+              "kind": "tag",
+              "target": "urn:li:dashboard:(looker,patient_overview)",
+              "detail": "tagged exposure point `patient_overview` with `policy-violation`",
+              "applied": true,
+              "dryRun": false,
+              "payload": {
+                "tag": "policy-violation"
+              }
+            },
+            {
+              "kind": "structured_property",
+              "target": "urn:li:schemaField:(urn:li:dataset:(urn:li:dataPlatform:postgres,healthcare.raw.patients,PROD),ssn)",
+              "detail": "recorded `io.kestrel.policy_violation` on `patients.ssn`",
+              "applied": true,
+              "dryRun": false,
+              "payload": {
+                "finding_id": "pii-reaches-bi-82fa8982",
+                "policy_id": "pii-reaches-bi",
+                "severity": "high",
+                "detected_at": "2026-08-06T05:36:58+00:00",
+                "scan_run": "kestrel-example-run",
+                "engine": "template",
+                "source_urn": "urn:li:schemaField:(urn:li:dataset:(urn:li:dataPlatform:postgres,healthcare.raw.patients,PROD),ssn)",
+                "summary": "healthcare.raw.patients.ssn reaches Dashboard/Chart 'patient_overview' via a 4-hop path, with no mask/hash/sha2 (+4 more) step on the way.",
+                "sink_urn": "urn:li:dashboard:(looker,patient_overview)",
+                "hops": 4,
+                "path": "urn:li:schemaField:(urn:li:dataset:(urn:li:dataPlatform:postgres,healthcare.raw.patients,PROD),ssn) -> urn:li:schemaField:(urn:li:dataset:(urn:li:dataPlatform:snowflake,healthcare.staging.stg_patients,PROD),ssn) -> urn:li:schemaField:(urn:li:dataset:(urn:li:dataPlatform:snowflake,healthcare.marts.patient_encounters,PROD),patient_ssn) -> urn:li:schemaField:(urn:li:dataset:(urn:li:dataPlatform:snowflake,healthcare.analytics.encounter_summary,PROD),patient_ssn) -> urn:li:dashboard:(looker,patient_overview)",
+                "owners": "urn:li:corpuser:dana.okoro"
+              }
+            },
+            {
+              "kind": "document",
+              "target": "urn:li:schemaField:(urn:li:dataset:(urn:li:dataPlatform:postgres,healthcare.raw.patients,PROD),ssn)",
+              "detail": "authored incident document \"Policy violation: pii-reaches-bi - healthcare.raw.patients.ssn -> patient_overview\"",
+              "applied": true,
+              "dryRun": false,
+              "payload": {
+                "title": "Policy violation: pii-reaches-bi - healthcare.raw.patients.ssn -> patient_overview",
+                "file": "out/examples-scratch/documents/pii-reaches-bi-82fa8982.md",
+                "related": [
+                  "urn:li:schemaField:(urn:li:dataset:(urn:li:dataPlatform:postgres,healthcare.raw.patients,PROD),ssn)",
+                  "urn:li:dashboard:(looker,patient_overview)"
+                ]
+              }
+            },
+            {
+              "kind": "notify",
+              "target": "urn:li:schemaField:(urn:li:dataset:(urn:li:dataPlatform:postgres,healthcare.raw.patients,PROD),ssn)",
+              "detail": "drafted owner ping for dana.okoro -> out/examples-scratch/actions/pii-reaches-bi-82fa8982.notify.md",
+              "applied": false,
+              "dryRun": true,
+              "payload": {
+                "owners": [
+                  "urn:li:corpuser:dana.okoro"
+                ],
+                "file": "out/examples-scratch/actions/pii-reaches-bi-82fa8982.notify.md"
+              }
+            }
+          ]
+        },
+        {
+          "id": "pii-reaches-bi-15dc0b3c",
+          "policyId": "pii-reaches-bi",
+          "severity": "high",
+          "engine": "template",
+          "title": "healthcare.raw.claims.member_dob -> claims_by_age",
+          "message": "healthcare.raw.claims.member_dob reaches Dashboard/Chart 'claims_by_age' via a 2-hop path, with no mask/hash/sha2 (+4 more) step on the way.",
+          "subject": {
+            "urn": "urn:li:schemaField:(urn:li:dataset:(urn:li:dataPlatform:postgres,healthcare.raw.claims,PROD),member_dob)",
+            "type": "schemaField",
+            "name": "healthcare.raw.claims.member_dob",
+            "platform": "postgres",
+            "subType": "date",
+            "tags": [
+              "PII",
+              "policy-violation"
+            ],
+            "terms": [],
+            "owners": [
+              "urn:li:corpuser:sam.reyes"
+            ],
+            "domain": "urn:li:domain:claims"
+          },
+          "sink": {
+            "urn": "urn:li:chart:(looker,claims_by_age)",
+            "type": "chart",
+            "name": "claims_by_age",
+            "platform": "looker",
+            "subType": "Chart",
+            "tags": [
+              "policy-violation"
+            ],
+            "terms": [],
+            "owners": [
+              "urn:li:corpuser:sam.reyes"
+            ]
+          },
+          "path": {
+            "hops": 2,
+            "nodes": [
+              {
+                "urn": "urn:li:schemaField:(urn:li:dataset:(urn:li:dataPlatform:postgres,healthcare.raw.claims,PROD),member_dob)",
+                "type": "schemaField",
+                "name": "healthcare.raw.claims.member_dob",
+                "platform": "postgres",
+                "subType": "date",
+                "tags": [
+                  "PII",
+                  "policy-violation"
+                ],
+                "terms": [],
+                "owners": [
+                  "urn:li:corpuser:sam.reyes"
+                ],
+                "domain": "urn:li:domain:claims"
+              },
+              {
+                "urn": "urn:li:schemaField:(urn:li:dataset:(urn:li:dataPlatform:snowflake,healthcare.marts.claims_enriched,PROD),member_dob)",
+                "type": "schemaField",
+                "name": "healthcare.marts.claims_enriched.member_dob",
+                "platform": "snowflake",
+                "subType": "date",
+                "tags": [],
+                "terms": [],
+                "owners": [
+                  "urn:li:corpuser:sam.reyes"
+                ],
+                "domain": "urn:li:domain:claims"
+              },
+              {
+                "urn": "urn:li:chart:(looker,claims_by_age)",
+                "type": "chart",
+                "name": "claims_by_age",
+                "platform": "looker",
+                "subType": "Chart",
+                "tags": [
+                  "policy-violation"
+                ],
+                "terms": [],
+                "owners": [
+                  "urn:li:corpuser:sam.reyes"
+                ]
+              }
+            ],
+            "edges": [
+              {
+                "source": "urn:li:schemaField:(urn:li:dataset:(urn:li:dataPlatform:postgres,healthcare.raw.claims,PROD),member_dob)",
+                "target": "urn:li:schemaField:(urn:li:dataset:(urn:li:dataPlatform:snowflake,healthcare.marts.claims_enriched,PROD),member_dob)",
+                "transform": "passthrough",
+                "query": "CREATE TABLE healthcare.marts.claims_enriched AS SELECT claim_id, member_dob, amount FROM healthcare.raw.claims",
+                "level": "column"
+              },
+              {
+                "source": "urn:li:schemaField:(urn:li:dataset:(urn:li:dataPlatform:snowflake,healthcare.marts.claims_enriched,PROD),member_dob)",
+                "target": "urn:li:chart:(looker,claims_by_age)",
+                "transform": "Looker explore: claims_enriched",
+                "level": "table"
+              }
+            ],
+            "rendered": "claims.member_dob -> claims_enriched.member_dob -> claims_by_age",
+            "notes": [
+              "column lineage unavailable at this hop; followed table-level lineage"
+            ]
+          },
+          "evidence": [
+            "hop 1: claims.member_dob -> claims_enriched.member_dob\n    transform: passthrough\n    sql: CREATE TABLE healthcare.marts.claims_enriched AS SELECT claim_id, member_dob, amount FROM healthcare.raw.claims",
+            "hop 2: claims_enriched.member_dob -> claims_by_age  [table-level]\n    transform: Looker explore: claims_enriched",
+            "column lineage unavailable at this hop; followed table-level lineage"
+          ],
+          "queries": [
+            "SELECT member_dob, amount FROM healthcare.raw.claims WHERE status = 'paid'"
+          ],
+          "owners": [
+            "urn:li:corpuser:sam.reyes"
+          ],
+          "remediation": "Mask or hash the column at the first transform downstream of the source, or drop it from the downstream model. If the exposure is reviewed and accepted, tag the mitigating step `Masked` so this policy stops reporting the path.",
+          "detectedAt": "2026-08-06T05:36:58+00:00",
+          "writebacks": [
+            {
+              "kind": "tag",
+              "target": "urn:li:schemaField:(urn:li:dataset:(urn:li:dataPlatform:postgres,healthcare.raw.claims,PROD),member_dob)",
+              "detail": "tagged `claims.member_dob` with `policy-violation`",
+              "applied": true,
+              "dryRun": false,
+              "payload": {
+                "tag": "policy-violation"
+              }
+            },
+            {
+              "kind": "tag",
+              "target": "urn:li:chart:(looker,claims_by_age)",
+              "detail": "tagged exposure point `claims_by_age` with `policy-violation`",
+              "applied": true,
+              "dryRun": false,
+              "payload": {
+                "tag": "policy-violation"
+              }
+            },
+            {
+              "kind": "structured_property",
+              "target": "urn:li:schemaField:(urn:li:dataset:(urn:li:dataPlatform:postgres,healthcare.raw.claims,PROD),member_dob)",
+              "detail": "recorded `io.kestrel.policy_violation` on `claims.member_dob`",
+              "applied": true,
+              "dryRun": false,
+              "payload": {
+                "finding_id": "pii-reaches-bi-15dc0b3c",
+                "policy_id": "pii-reaches-bi",
+                "severity": "high",
+                "detected_at": "2026-08-06T05:36:58+00:00",
+                "scan_run": "kestrel-example-run",
+                "engine": "template",
+                "source_urn": "urn:li:schemaField:(urn:li:dataset:(urn:li:dataPlatform:postgres,healthcare.raw.claims,PROD),member_dob)",
+                "summary": "healthcare.raw.claims.member_dob reaches Dashboard/Chart 'claims_by_age' via a 2-hop path, with no mask/hash/sha2 (+4 more) step on the way.",
+                "sink_urn": "urn:li:chart:(looker,claims_by_age)",
+                "hops": 2,
+                "path": "urn:li:schemaField:(urn:li:dataset:(urn:li:dataPlatform:postgres,healthcare.raw.claims,PROD),member_dob) -> urn:li:schemaField:(urn:li:dataset:(urn:li:dataPlatform:snowflake,healthcare.marts.claims_enriched,PROD),member_dob) -> urn:li:chart:(looker,claims_by_age)",
+                "owners": "urn:li:corpuser:sam.reyes"
+              }
+            },
+            {
+              "kind": "document",
+              "target": "urn:li:schemaField:(urn:li:dataset:(urn:li:dataPlatform:postgres,healthcare.raw.claims,PROD),member_dob)",
+              "detail": "authored incident document \"Policy violation: pii-reaches-bi - healthcare.raw.claims.member_dob -> claims_by_age\"",
+              "applied": true,
+              "dryRun": false,
+              "payload": {
+                "title": "Policy violation: pii-reaches-bi - healthcare.raw.claims.member_dob -> claims_by_age",
+                "file": "out/examples-scratch/documents/pii-reaches-bi-15dc0b3c.md",
+                "related": [
+                  "urn:li:schemaField:(urn:li:dataset:(urn:li:dataPlatform:postgres,healthcare.raw.claims,PROD),member_dob)",
+                  "urn:li:chart:(looker,claims_by_age)"
+                ]
+              }
+            },
+            {
+              "kind": "notify",
+              "target": "urn:li:schemaField:(urn:li:dataset:(urn:li:dataPlatform:postgres,healthcare.raw.claims,PROD),member_dob)",
+              "detail": "drafted owner ping for sam.reyes -> out/examples-scratch/actions/pii-reaches-bi-15dc0b3c.notify.md",
+              "applied": false,
+              "dryRun": true,
+              "payload": {
+                "owners": [
+                  "urn:li:corpuser:sam.reyes"
+                ],
+                "file": "out/examples-scratch/actions/pii-reaches-bi-15dc0b3c.notify.md"
+              }
+            }
+          ]
+        },
+        {
+          "id": "pii-reaches-bi-6580a708",
+          "policyId": "pii-reaches-bi",
+          "severity": "high",
+          "engine": "template",
+          "title": "healthcare.raw.legacy_billing.member_ssn -> revenue_ops",
+          "message": "healthcare.raw.legacy_billing.member_ssn reaches Dashboard/Chart 'revenue_ops' via a 2-hop path, with no mask/hash/sha2 (+4 more) step on the way.",
+          "subject": {
+            "urn": "urn:li:schemaField:(urn:li:dataset:(urn:li:dataPlatform:postgres,healthcare.raw.legacy_billing,PROD),member_ssn)",
+            "type": "schemaField",
+            "name": "healthcare.raw.legacy_billing.member_ssn",
+            "platform": "postgres",
+            "subType": "string",
+            "tags": [
+              "PII",
+              "Confidential",
+              "policy-violation"
+            ],
+            "terms": [],
+            "owners": []
+          },
+          "sink": {
+            "urn": "urn:li:dashboard:(looker,revenue_ops)",
+            "type": "dashboard",
+            "name": "revenue_ops",
+            "platform": "looker",
+            "subType": "Dashboard",
+            "tags": [
+              "Production",
+              "policy-violation"
+            ],
+            "terms": [],
+            "owners": [
+              "urn:li:corpuser:morgan.diallo"
+            ]
+          },
+          "path": {
+            "hops": 2,
+            "nodes": [
+              {
+                "urn": "urn:li:schemaField:(urn:li:dataset:(urn:li:dataPlatform:postgres,healthcare.raw.legacy_billing,PROD),member_ssn)",
+                "type": "schemaField",
+                "name": "healthcare.raw.legacy_billing.member_ssn",
+                "platform": "postgres",
+                "subType": "string",
+                "tags": [
+                  "PII",
+                  "Confidential",
+                  "policy-violation"
+                ],
+                "terms": [],
+                "owners": []
+              },
+              {
+                "urn": "urn:li:dataset:(urn:li:dataPlatform:snowflake,healthcare.marts.billing_rollup,PROD)",
+                "type": "dataset",
+                "name": "healthcare.marts.billing_rollup",
+                "platform": "snowflake",
+                "subType": "Table",
+                "tags": [],
+                "terms": [],
+                "owners": [
+                  "urn:li:corpuser:morgan.diallo"
+                ]
+              },
+              {
+                "urn": "urn:li:dashboard:(looker,revenue_ops)",
+                "type": "dashboard",
+                "name": "revenue_ops",
+                "platform": "looker",
+                "subType": "Dashboard",
+                "tags": [
+                  "Production",
+                  "policy-violation"
+                ],
+                "terms": [],
+                "owners": [
+                  "urn:li:corpuser:morgan.diallo"
+                ]
+              }
+            ],
+            "edges": [
+              {
+                "source": "urn:li:schemaField:(urn:li:dataset:(urn:li:dataPlatform:postgres,healthcare.raw.legacy_billing,PROD),member_ssn)",
+                "target": "urn:li:dataset:(urn:li:dataPlatform:snowflake,healthcare.marts.billing_rollup,PROD)",
+                "transform": "nightly rollup job",
+                "query": "INSERT INTO healthcare.marts.billing_rollup SELECT invoice_id, member_ssn, amount_due FROM healthcare.raw.legacy_billing",
+                "level": "table"
+              },
+              {
+                "source": "urn:li:dataset:(urn:li:dataPlatform:snowflake,healthcare.marts.billing_rollup,PROD)",
+                "target": "urn:li:dashboard:(looker,revenue_ops)",
+                "transform": "Looker explore: billing_rollup",
+                "level": "table"
+              }
+            ],
+            "rendered": "legacy_billing.member_ssn -> billing_rollup -> revenue_ops",
+            "notes": [
+              "column lineage unavailable at this hop; followed table-level lineage"
+            ]
+          },
+          "evidence": [
+            "hop 1: legacy_billing.member_ssn -> billing_rollup  [table-level]\n    transform: nightly rollup job\n    sql: INSERT INTO healthcare.marts.billing_rollup SELECT invoice_id, member_ssn, amount_due FROM healthcare.raw.legacy_billing",
+            "hop 2: billing_rollup -> revenue_ops  [table-level]\n    transform: Looker explore: billing_rollup",
+            "column lineage unavailable at this hop; followed table-level lineage"
+          ],
+          "queries": [
+            "SELECT invoice_id, member_ssn, amount_due FROM healthcare.raw.legacy_billing WHERE amount_due > 0"
+          ],
+          "owners": [
+            "urn:li:corpuser:morgan.diallo"
+          ],
+          "remediation": "Mask or hash the column at the first transform downstream of the source, or drop it from the downstream model. If the exposure is reviewed and accepted, tag the mitigating step `Masked` so this policy stops reporting the path.",
+          "detectedAt": "2026-08-06T05:36:58+00:00",
+          "writebacks": [
+            {
+              "kind": "tag",
+              "target": "urn:li:schemaField:(urn:li:dataset:(urn:li:dataPlatform:postgres,healthcare.raw.legacy_billing,PROD),member_ssn)",
+              "detail": "tagged `legacy_billing.member_ssn` with `policy-violation`",
+              "applied": true,
+              "dryRun": false,
+              "payload": {
+                "tag": "policy-violation"
+              }
+            },
+            {
+              "kind": "tag",
+              "target": "urn:li:dashboard:(looker,revenue_ops)",
+              "detail": "tagged exposure point `revenue_ops` with `policy-violation`",
+              "applied": true,
+              "dryRun": false,
+              "payload": {
+                "tag": "policy-violation"
+              }
+            },
+            {
+              "kind": "structured_property",
+              "target": "urn:li:schemaField:(urn:li:dataset:(urn:li:dataPlatform:postgres,healthcare.raw.legacy_billing,PROD),member_ssn)",
+              "detail": "recorded `io.kestrel.policy_violation` on `legacy_billing.member_ssn`",
+              "applied": true,
+              "dryRun": false,
+              "payload": {
+                "finding_id": "pii-reaches-bi-6580a708",
+                "policy_id": "pii-reaches-bi",
+                "severity": "high",
+                "detected_at": "2026-08-06T05:36:58+00:00",
+                "scan_run": "kestrel-example-run",
+                "engine": "template",
+                "source_urn": "urn:li:schemaField:(urn:li:dataset:(urn:li:dataPlatform:postgres,healthcare.raw.legacy_billing,PROD),member_ssn)",
+                "summary": "healthcare.raw.legacy_billing.member_ssn reaches Dashboard/Chart 'revenue_ops' via a 2-hop path, with no mask/hash/sha2 (+4 more) step on the way.",
+                "sink_urn": "urn:li:dashboard:(looker,revenue_ops)",
+                "hops": 2,
+                "path": "urn:li:schemaField:(urn:li:dataset:(urn:li:dataPlatform:postgres,healthcare.raw.legacy_billing,PROD),member_ssn) -> urn:li:dataset:(urn:li:dataPlatform:snowflake,healthcare.marts.billing_rollup,PROD) -> urn:li:dashboard:(looker,revenue_ops)",
+                "owners": "urn:li:corpuser:morgan.diallo"
+              }
+            },
+            {
+              "kind": "document",
+              "target": "urn:li:schemaField:(urn:li:dataset:(urn:li:dataPlatform:postgres,healthcare.raw.legacy_billing,PROD),member_ssn)",
+              "detail": "authored incident document \"Policy violation: pii-reaches-bi - healthcare.raw.legacy_billing.member_ssn -> revenue_ops\"",
+              "applied": true,
+              "dryRun": false,
+              "payload": {
+                "title": "Policy violation: pii-reaches-bi - healthcare.raw.legacy_billing.member_ssn -> revenue_ops",
+                "file": "out/examples-scratch/documents/pii-reaches-bi-6580a708.md",
+                "related": [
+                  "urn:li:schemaField:(urn:li:dataset:(urn:li:dataPlatform:postgres,healthcare.raw.legacy_billing,PROD),member_ssn)",
+                  "urn:li:dashboard:(looker,revenue_ops)"
+                ]
+              }
+            },
+            {
+              "kind": "notify",
+              "target": "urn:li:schemaField:(urn:li:dataset:(urn:li:dataPlatform:postgres,healthcare.raw.legacy_billing,PROD),member_ssn)",
+              "detail": "drafted owner ping for morgan.diallo -> out/examples-scratch/actions/pii-reaches-bi-6580a708.notify.md",
+              "applied": false,
+              "dryRun": true,
+              "payload": {
+                "owners": [
+                  "urn:li:corpuser:morgan.diallo"
+                ],
+                "file": "out/examples-scratch/actions/pii-reaches-bi-6580a708.notify.md"
+              }
+            }
+          ]
+        }
+      ],
+      "durationMs": 2,
+      "notes": [
+        "patients.email: path suppressed -- passes through masking step 'stg_patients_masked.email_masked'",
+        "5 hop(s) used table-level lineage because column-level lineage was not populated there"
+      ]
+    },
+    {
+      "policyId": "stale-upstream-feeds-live",
+      "description": "A Certified or Production asset must not depend on an upstream that is tagged Stale, Deprecated or Quality:Failed, anywhere within 4 hops.",
+      "severity": "high",
+      "engine": "template",
+      "subjectsScanned": 3,
+      "pathsWalked": 2,
+      "violationCount": 1,
+      "violations": [
+        {
+          "id": "stale-upstream-feeds-live-f1771ba2",
+          "policyId": "stale-upstream-feeds-live",
+          "severity": "high",
+          "engine": "template",
+          "title": "healthcare.marts.patient_360 -> lab_results",
+          "message": "healthcare.marts.patient_360 is certified but depends on healthcare.raw.lab_results, which is tagged Stale/Deprecated/Quality:Failed, 2 hops upstream.",
+          "subject": {
+            "urn": "urn:li:dataset:(urn:li:dataPlatform:snowflake,healthcare.marts.patient_360,PROD)",
+            "type": "dataset",
+            "name": "healthcare.marts.patient_360",
+            "platform": "snowflake",
+            "subType": "Table",
+            "tags": [
+              "Certified",
+              "Production",
+              "policy-violation"
+            ],
+            "terms": [],
+            "owners": [
+              "urn:li:corpuser:dana.okoro"
+            ],
+            "domain": "urn:li:domain:clinical"
+          },
+          "sink": {
+            "urn": "urn:li:dataset:(urn:li:dataPlatform:postgres,healthcare.raw.lab_results,PROD)",
+            "type": "dataset",
+            "name": "healthcare.raw.lab_results",
+            "platform": "postgres",
+            "subType": "Table",
+            "tags": [
+              "Stale",
+              "Quality:Failed",
+              "policy-violation"
+            ],
+            "terms": [],
+            "owners": [
+              "urn:li:corpuser:sam.reyes"
+            ]
+          },
+          "path": {
+            "hops": 2,
+            "nodes": [
+              {
+                "urn": "urn:li:dataset:(urn:li:dataPlatform:snowflake,healthcare.marts.patient_360,PROD)",
+                "type": "dataset",
+                "name": "healthcare.marts.patient_360",
+                "platform": "snowflake",
+                "subType": "Table",
+                "tags": [
+                  "Certified",
+                  "Production",
+                  "policy-violation"
+                ],
+                "terms": [],
+                "owners": [
+                  "urn:li:corpuser:dana.okoro"
+                ],
+                "domain": "urn:li:domain:clinical"
+              },
+              {
+                "urn": "urn:li:dataset:(urn:li:dataPlatform:snowflake,healthcare.staging.stg_labs,PROD)",
+                "type": "dataset",
+                "name": "healthcare.staging.stg_labs",
+                "platform": "snowflake",
+                "subType": "Table",
+                "tags": [],
+                "terms": [],
+                "owners": [
+                  "urn:li:corpuser:sam.reyes"
+                ]
+              },
+              {
+                "urn": "urn:li:dataset:(urn:li:dataPlatform:postgres,healthcare.raw.lab_results,PROD)",
+                "type": "dataset",
+                "name": "healthcare.raw.lab_results",
+                "platform": "postgres",
+                "subType": "Table",
+                "tags": [
+                  "Stale",
+                  "Quality:Failed",
+                  "policy-violation"
+                ],
+                "terms": [],
+                "owners": [
+                  "urn:li:corpuser:sam.reyes"
+                ]
+              }
+            ],
+            "edges": [
+              {
+                "source": "urn:li:dataset:(urn:li:dataPlatform:snowflake,healthcare.staging.stg_labs,PROD)",
+                "target": "urn:li:dataset:(urn:li:dataPlatform:snowflake,healthcare.marts.patient_360,PROD)",
+                "transform": "latest result per patient",
+                "level": "table"
+              },
+              {
+                "source": "urn:li:dataset:(urn:li:dataPlatform:postgres,healthcare.raw.lab_results,PROD)",
+                "target": "urn:li:dataset:(urn:li:dataPlatform:snowflake,healthcare.staging.stg_labs,PROD)",
+                "transform": "cleanse + dedupe",
+                "level": "table"
+              }
+            ],
+            "rendered": "patient_360 -> stg_labs -> lab_results",
+            "notes": [
+              "column lineage unavailable at this hop; followed table-level lineage"
+            ]
+          },
+          "evidence": [
+            "hop 1: stg_labs <- patient_360  [table-level]\n    transform: latest result per patient",
+            "hop 2: lab_results <- stg_labs  [table-level]\n    transform: cleanse + dedupe",
+            "column lineage unavailable at this hop; followed table-level lineage"
+          ],
+          "queries": [
+            "SELECT patient_id, latest_result FROM healthcare.marts.patient_360"
+          ],
+          "owners": [
+            "urn:li:corpuser:dana.okoro"
+          ],
+          "remediation": "Refresh or repair the flagged upstream before it feeds a certified asset, or drop the certification until the dependency is healthy. If the upstream is being retired, cut the dependency rather than inheriting its decay.",
+          "detectedAt": "2026-08-06T05:36:58+00:00",
+          "writebacks": [
+            {
+              "kind": "tag",
+              "target": "urn:li:dataset:(urn:li:dataPlatform:snowflake,healthcare.marts.patient_360,PROD)",
+              "detail": "tagged `patient_360` with `policy-violation`",
+              "applied": true,
+              "dryRun": false,
+              "payload": {
+                "tag": "policy-violation"
+              }
+            },
+            {
+              "kind": "tag",
+              "target": "urn:li:dataset:(urn:li:dataPlatform:postgres,healthcare.raw.lab_results,PROD)",
+              "detail": "tagged exposure point `lab_results` with `policy-violation`",
+              "applied": true,
+              "dryRun": false,
+              "payload": {
+                "tag": "policy-violation"
+              }
+            },
+            {
+              "kind": "structured_property",
+              "target": "urn:li:dataset:(urn:li:dataPlatform:snowflake,healthcare.marts.patient_360,PROD)",
+              "detail": "recorded `io.kestrel.policy_violation` on `patient_360`",
+              "applied": true,
+              "dryRun": false,
+              "payload": {
+                "finding_id": "stale-upstream-feeds-live-f1771ba2",
+                "policy_id": "stale-upstream-feeds-live",
+                "severity": "high",
+                "detected_at": "2026-08-06T05:36:58+00:00",
+                "scan_run": "kestrel-example-run",
+                "engine": "template",
+                "source_urn": "urn:li:dataset:(urn:li:dataPlatform:snowflake,healthcare.marts.patient_360,PROD)",
+                "summary": "healthcare.marts.patient_360 is certified but depends on healthcare.raw.lab_results, which is tagged Stale/Deprecated/Quality:Failed, 2 hops upstream.",
+                "sink_urn": "urn:li:dataset:(urn:li:dataPlatform:postgres,healthcare.raw.lab_results,PROD)",
+                "hops": 2,
+                "path": "urn:li:dataset:(urn:li:dataPlatform:snowflake,healthcare.marts.patient_360,PROD) -> urn:li:dataset:(urn:li:dataPlatform:snowflake,healthcare.staging.stg_labs,PROD) -> urn:li:dataset:(urn:li:dataPlatform:postgres,healthcare.raw.lab_results,PROD)",
+                "owners": "urn:li:corpuser:dana.okoro"
+              }
+            },
+            {
+              "kind": "document",
+              "target": "urn:li:dataset:(urn:li:dataPlatform:snowflake,healthcare.marts.patient_360,PROD)",
+              "detail": "authored incident document \"Policy violation: stale-upstream-feeds-live - healthcare.marts.patient_360 -> lab_results\"",
+              "applied": true,
+              "dryRun": false,
+              "payload": {
+                "title": "Policy violation: stale-upstream-feeds-live - healthcare.marts.patient_360 -> lab_results",
+                "file": "out/examples-scratch/documents/stale-upstream-feeds-live-f1771ba2.md",
+                "related": [
+                  "urn:li:dataset:(urn:li:dataPlatform:snowflake,healthcare.marts.patient_360,PROD)",
+                  "urn:li:dataset:(urn:li:dataPlatform:postgres,healthcare.raw.lab_results,PROD)"
+                ]
+              }
+            },
+            {
+              "kind": "pr",
+              "target": "urn:li:dataset:(urn:li:dataPlatform:snowflake,healthcare.marts.patient_360,PROD)",
+              "detail": "drafted remediation PR -> out/examples-scratch/actions/stale-upstream-feeds-live-f1771ba2.pr.md",
+              "applied": false,
+              "dryRun": true,
+              "payload": {
+                "title": "fix(stale-upstream-feeds-live): healthcare.marts.patient_360 -> lab_results",
+                "file": "out/examples-scratch/actions/stale-upstream-feeds-live-f1771ba2.pr.md",
+                "command": "gh pr create --repo <owner/repo> --title \"fix(stale-upstream-feeds-live): healthcare.marts.patient_360 -> lab_results\" --body-file out/examples-scratch/actions/stale-upstream-feeds-live-f1771ba2.pr.md"
+              }
+            }
+          ]
+        }
+      ],
+      "durationMs": 0,
+      "notes": []
+    }
+  ],
+  "warnings": [
+    "generated from fixtures/healthcare.json, not a live DataHub -- the shapes are real, the instance is not"
+  ]
+}

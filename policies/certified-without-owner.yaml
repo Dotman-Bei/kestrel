@@ -1,0 +1,29 @@
+# The cheap, always-true-somewhere rule. Per-entity by nature -- included
+# because a governance tool that only does the clever case is not a governance
+# tool, and because it proves the same policy file drives both kinds of check.
+- id: certified-without-owner
+  severity: medium
+  description: >-
+    Anything marked Certified or Production must have an owner. Certification
+    without accountability is a promise nobody made.
+  subject:
+    entity_type: dataset
+    has_any_tag: [Certified, Production]
+  condition:
+    missing_owner: true
+  on_violation: [tag, structured_property, document]
+  remediation: >-
+    Assign a technical and a business owner in DataHub, or remove the
+    certification until someone will stand behind it.
+
+- id: certified-dashboard-without-owner
+  severity: medium
+  description: >-
+    Certified dashboards must have an owner -- they are what executives read.
+  subject:
+    entity_type: dashboard
+    has_any_tag: [Certified, Production]
+  condition:
+    missing_owner: true
+  on_violation: [tag, structured_property, document]
+  remediation: Assign an owner to the dashboard, or drop its certification.

@@ -1,0 +1,169 @@
+#!/usr/bin/env python
+"""Regenerate everything in ``examples/`` from a real scan of the fixture graph.
+
+Committed sample outputs let a judge see what Kestrel produces without running
+anything -- but only if they are genuinely produced rather than hand-written.
+This script is how they are made, and re-running it is the check that they are
+still true.
+
+    python scripts/generate_examples.py
+"""
+
+from __future__ import annotations
+
+import json
+import shutil
+import sys
+from pathlib import Path
+
+from policy_sentinel import render
+from policy_sentinel.engine_templates import TemplateEngine
+from policy_sentinel.fixture_client import FixtureCatalog
+from policy_sentinel.models import ScanReport, utc_now
+from policy_sentinel.policy import load_policies
+from policy_sentinel.writeback import WriteBackConfig, WriteBackWriter
+
+ROOT = Path(__file__).resolve().parents[1]
+EXAMPLES = ROOT / "examples"
+BEFORE_AFTER = EXAMPLES / "before-after"
+RUN_ID = "kestrel-example-run"
+
+HEADLINE = "pii-reaches-bi"
+
+
+def main() -> int:
+    EXAMPLES.mkdir(exist_ok=True)
+    BEFORE_AFTER.mkdir(parents=True, exist_ok=True)
+    scratch = ROOT / "out" / "examples-scratch"
+    if scratch.exists():
+        shutil.rmtree(scratch)
+
+    catalog = FixtureCatalog.load("healthcare")
+    policies = {p.id: p for p in load_policies(ROOT / "policies")}
+    engine = TemplateEngine(catalog)
+    writer = WriteBackWriter(
+        catalog=catalog,
+        run_id=RUN_ID,
+        config=WriteBackConfig(enabled=True, dry_run=False, out_dir=scratch),
+    )
+
+    report = ScanReport(
+        run_id=RUN_ID,
+        started_at=utc_now(),
+        mode=catalog.mode,
+        target="policies/",
+        writeback_enabled=True,
+        dry_run=False,
+        datahub_url=catalog.base_url,
+        warnings=[
+            "generated from fixtures/healthcare.json, not a live DataHub -- "
+            "the shapes are real, the instance is not"
+        ],
+    )
+
+    # Snapshot the assets we are about to change, before we change them.
+    headline_policy = policies[HEADLINE]
+    pre = engine.evaluate(headline_policy)
+    tracked = []
+    for violation in pre.violations:
+        tracked.append(violation.subject.urn)
+        if violation.sink is not None:
+            tracked.append(violation.sink.urn)
+    before = {urn: catalog.snapshot(urn) for urn in dict.fromkeys(tracked)}
+
+    # Fresh catalog + engine so the recorded run is a clean one.
+    catalog = FixtureCatalog.load("healthcare")
+    engine = TemplateEngine(catalog)
+    writer.catalog = catalog
+
+    for policy in policies.values():
+        result = engine.evaluate(policy)
+        for violation in result.violations:
+            writer.apply(violation, policy)
+        report.results.append(result)
+    report.finished_at = utc_now()
+
+    after = {urn: catalog.snapshot(urn) for urn in before}
+
+    # 1. the scan report, both formats
+    (EXAMPLES / f"{HEADLINE}.report.md").write_text(
+        render.report_markdown(report, policies), encoding="utf-8"
+    )
+    (EXAMPLES / "scan-report.json").write_text(
+        json.dumps(report.to_dict(), indent=2), encoding="utf-8"
+    )
+
+    # 2. the headline incident document -- what actually lands in DataHub
+    headline = next(
+        v
+        for v in report.violations
+        if v.policy_id == HEADLINE and v.subject.urn.endswith(",ssn)")
+    )
+    (EXAMPLES / "violation-document.md").write_text(
+        render.incident_markdown(headline, headline_policy, RUN_ID, catalog.base_url),
+        encoding="utf-8",
+    )
+
+    # 3. the two actions
+    for violation in report.violations:
+        for wb in violation.writebacks:
+            source = wb.payload.get("file")
+            if not source:
+                continue
+            name = Path(source).name
+            if name.endswith(".pr.md"):
+                shutil.copy(source, EXAMPLES / "remediation-pr.md")
+            elif name.endswith(".notify.md"):
+                shutil.copy(source, EXAMPLES / "owner-notification.md")
+
+    # 4. before/after on the entities the scan touched
+    (BEFORE_AFTER / "before.json").write_text(json.dumps(before, indent=2), encoding="utf-8")
+    (BEFORE_AFTER / "after.json").write_text(json.dumps(after, indent=2), encoding="utf-8")
+    (BEFORE_AFTER / "README.md").write_text(_diff_readme(before, after), encoding="utf-8")
+
+    if scratch.exists():
+        shutil.rmtree(scratch)
+
+    counts = report.to_dict()["summary"]
+    print(f"examples/ regenerated: {counts['violations']} violations, {counts['writebacks']} write-backs")
+    for path in sorted(EXAMPLES.rglob("*")):
+        if path.is_file():
+            print(f"  {path.relative_to(ROOT)}")
+    return 0
+
+
+def _diff_readme(before: dict, after: dict) -> str:
+    """The literal delta a scan makes to the catalog."""
+    lines = [
+        "# Before / after",
+        "",
+        "What one `kestrel scan --write` run changed in the catalog. Generated by",
+        "`scripts/generate_examples.py`; the JSON either side of this table is the",
+        "raw entity state.",
+        "",
+        "The point of the table: the graph is *materially richer* after the run.",
+        "Someone who opens the dashboard tomorrow inherits the finding without",
+        "knowing the policy exists.",
+        "",
+        "| Entity | Tags before | Tags after | Properties added |",
+        "|---|---|---|---|",
+    ]
+    for urn, old in before.items():
+        new = after.get(urn, {})
+        old_tags = ", ".join(old.get("tags", [])) or "—"
+        new_tags = ", ".join(new.get("tags", [])) or "—"
+        added = [k.rsplit(":", 1)[-1] for k in new.get("properties", {}) if k not in old.get("properties", {})]
+        lines.append(
+            f"| `{new.get('name', urn)}` | {old_tags} | **{new_tags}** | {', '.join(added) or '—'} |"
+        )
+    lines += [
+        "",
+        "Plus one incident document per finding, linked to both ends of the path —",
+        "see [`../violation-document.md`](../violation-document.md).",
+        "",
+    ]
+    return "\n".join(lines)
+
+
+if __name__ == "__main__":
+    sys.exit(main())

@@ -1,0 +1,24 @@
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+dist/
+build/
+.pytest_cache/
+.env
+.env.local
+
+# Node / Next.js
+node_modules/
+web/.next/
+web/out/
+web/next-env.d.ts
+*.tsbuildinfo
+.DS_Store
+
+# Scan artifacts (examples/ is committed on purpose; out/ is scratch)
+out/
+
+# Local-only: recording notes and video script, not part of the shipped project
+demo/

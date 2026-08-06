@@ -1,0 +1,165 @@
+@import "tailwindcss";
+
+/* ---------------------------------------------------------------------------
+   Design tokens.
+
+   Declared once here so every token is available BOTH as a Tailwind utility
+   (`bg-signal`, `text-muted`) and as a raw variable (`var(--color-signal)`) for
+   arbitrary values. The brutalist offset shadows need the raw variable; the
+   layout needs the utilities. That dual exposure is the whole trick -- do not
+   move these into a separate config file.
+
+   Hard rule: no pure white (#FFF) and no pure black (#000) anywhere. Every
+   "white" is a cool off-white, every "black" is a desaturated near-black slate.
+--------------------------------------------------------------------------- */
+
+@theme {
+  /* surfaces */
+  --color-page: #eef1f6;      /* pale cool slate -- the app canvas */
+  --color-surface: #fbfcfe;   /* near-white card surface */
+  --color-void: #191d26;      /* near-black slate -- borders, dark text, fills */
+  --color-void-3: #e4e8f0;    /* muted chip surface */
+
+  /* the one accent. Kestrel finds violations, so the accent IS the finding. */
+  --color-signal: #d94f38;
+  --color-signal-dim: rgba(217, 79, 56, 0.35);
+  --color-signal-faint: rgba(217, 79, 56, 0.12);
+  --color-signal-deep: #bc4029;  /* button hover -- a darker signal */
+
+  /* text */
+  --color-text: #191d26;
+  --color-muted: #5f6675;
+  --color-muted-2: #8b93a3;
+
+  /* lines */
+  --color-border: rgba(25, 29, 38, 0.1);
+  --color-border-strong: rgba(25, 29, 38, 0.2);
+  --color-brut-line: rgba(25, 29, 38, 0.88);
+
+  /* categorical pastels -- one per policy, and that mapping never moves.
+     These encode WHICH POLICY, they are not decoration. */
+  --color-blush: #f2b5a7;   /* pii-reaches-bi        (the headline) */
+  --color-sage: #b8d8c0;    /* certified-without-owner */
+  --color-sky: #a8c6e6;     /* stale-upstream-feeds-live */
+  --color-sand: #f2d9a4;    /* freeform (the agent) */
+
+  /* radius scale */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --radius-2xl: 28px;
+
+  /* fonts, wired to the next/font variables set on <html> */
+  --font-display: var(--font-bricolage), ui-sans-serif, system-ui, sans-serif;
+  --font-body: var(--font-public-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, monospace;
+}
+
+/* --------------------------------------------------------------------- base */
+
+body {
+  background-color: var(--color-page);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  letter-spacing: -0.01em;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::selection {
+  background: var(--color-signal-faint);
+}
+
+/* Focus is never removed without replacement. */
+:focus-visible {
+  outline: none;
+}
+
+/* --------------------------------------------------------- component classes
+   The two hover recipes, applied per component. Buttons press IN (the shadow
+   collapses to zero and the element slides into where its shadow was); cards
+   lift UP (the shadow grows and the element rises). Learn both -- the physics
+   has to be consistent for the system to feel like one object.
+--------------------------------------------------------------------------- */
+
+@layer components {
+  /* PRESS IN -- the translate distance equals the shadow offset, so the element
+     lands exactly where its shadow was. */
+  .btn-press {
+    @apply inline-flex items-center justify-center gap-2 rounded-full border-2 border-void
+           px-[30px] py-3.5 font-medium text-void transition-all duration-150
+           hover:translate-x-[5px] hover:translate-y-[5px] hover:scale-[0.98]
+           focus-visible:ring-2 focus-visible:ring-[var(--color-signal)] focus-visible:ring-offset-2
+           focus-visible:ring-offset-[var(--color-page)];
+    box-shadow: 5px 5px 0 0 var(--color-brut-line);
+  }
+  .btn-press:hover {
+    box-shadow: 0 0 0 0 var(--color-brut-line);
+  }
+
+  .btn-press-sm {
+    @apply inline-flex items-center justify-center gap-1.5 rounded-full border-2 border-void
+           px-4 py-2 text-[13px] font-medium text-void transition-all duration-150
+           hover:translate-x-[3px] hover:translate-y-[3px] hover:scale-[0.98]
+           focus-visible:ring-2 focus-visible:ring-[var(--color-signal)];
+    box-shadow: 3px 3px 0 0 var(--color-brut-line);
+  }
+  .btn-press-sm:hover {
+    box-shadow: 0 0 0 0 var(--color-brut-line);
+  }
+
+  /* LIFT UP -- the opposite mechanic. Peeling a sticker off the page. */
+  .card-lift {
+    @apply rounded-[20px] border-2 border-void transition-[rotate,translate,box-shadow]
+           duration-200 ease-out hover:-translate-y-1.5;
+    box-shadow: 6px 6px 0 0 var(--color-brut-line);
+  }
+  .card-lift:hover {
+    box-shadow: 9px 9px 0 0 var(--color-brut-line);
+  }
+
+  .surface-card {
+    @apply rounded-2xl border-2 border-void bg-surface;
+    box-shadow: 7px 7px 0 0 var(--color-brut-line);
+  }
+
+  /* Mono uppercase eyebrow. Tracking is the signal: eyebrows widest at .18em,
+     data labels tighter at .08em. */
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--color-muted);
+  }
+
+  .data-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-muted-2);
+  }
+
+  .machine {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--color-muted-2);
+  }
+}
+
+/* ------------------------------------------------------------------ motion */
+
+/* Every animated component also guards this in JS and renders its correct
+   static end-state; this is the belt to that braces. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

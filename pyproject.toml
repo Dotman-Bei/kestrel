@@ -1,0 +1,43 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "kestrel-policy-sentinel"
+version = "0.1.0"
+description = "Semgrep for your data catalog: lineage-path governance policies enforced against DataHub by an agent."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { file = "LICENSE" }
+authors = [{ name = "Kestrel Policy Sentinel contributors" }]
+keywords = ["datahub", "governance", "lineage", "mcp", "metadata", "policy"]
+classifiers = [
+  "License :: OSI Approved :: Apache Software License",
+  "Programming Language :: Python :: 3",
+  "Topic :: Database",
+]
+dependencies = [
+  "pyyaml>=6.0",
+  "rich>=13.0",
+  "typer>=0.12",
+  "mcp>=1.2",
+]
+
+[project.optional-dependencies]
+agent = ["anthropic>=0.40"]
+dev = ["pytest>=8.0", "anthropic>=0.40"]
+
+[project.scripts]
+kestrel = "policy_sentinel.cli:main"
+sentinel = "policy_sentinel.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/kestrel-sentinel/kestrel"
+Repository = "https://github.com/kestrel-sentinel/kestrel"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/policy_sentinel"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]

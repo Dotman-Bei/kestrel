@@ -1,0 +1,90 @@
+{
+  "urn:li:schemaField:(urn:li:dataset:(urn:li:dataPlatform:postgres,healthcare.raw.patients,PROD),ssn)": {
+    "urn": "urn:li:schemaField:(urn:li:dataset:(urn:li:dataPlatform:postgres,healthcare.raw.patients,PROD),ssn)",
+    "type": "schemaField",
+    "name": "healthcare.raw.patients.ssn",
+    "platform": "postgres",
+    "subType": "string",
+    "tags": [
+      "PII",
+      "Sensitive"
+    ],
+    "terms": [],
+    "owners": [
+      "urn:li:corpuser:dana.okoro"
+    ],
+    "domain": "urn:li:domain:clinical",
+    "properties": {}
+  },
+  "urn:li:dashboard:(looker,patient_overview)": {
+    "urn": "urn:li:dashboard:(looker,patient_overview)",
+    "type": "dashboard",
+    "name": "patient_overview",
+    "platform": "looker",
+    "subType": "Dashboard",
+    "tags": [
+      "Certified"
+    ],
+    "terms": [],
+    "owners": [],
+    "properties": {}
+  },
+  "urn:li:schemaField:(urn:li:dataset:(urn:li:dataPlatform:postgres,healthcare.raw.claims,PROD),member_dob)": {
+    "urn": "urn:li:schemaField:(urn:li:dataset:(urn:li:dataPlatform:postgres,healthcare.raw.claims,PROD),member_dob)",
+    "type": "schemaField",
+    "name": "healthcare.raw.claims.member_dob",
+    "platform": "postgres",
+    "subType": "date",
+    "tags": [
+      "PII"
+    ],
+    "terms": [],
+    "owners": [
+      "urn:li:corpuser:sam.reyes"
+    ],
+    "domain": "urn:li:domain:claims",
+    "properties": {}
+  },
+  "urn:li:chart:(looker,claims_by_age)": {
+    "urn": "urn:li:chart:(looker,claims_by_age)",
+    "type": "chart",
+    "name": "claims_by_age",
+    "platform": "looker",
+    "subType": "Chart",
+    "tags": [],
+    "terms": [],
+    "owners": [
+      "urn:li:corpuser:sam.reyes"
+    ],
+    "properties": {}
+  },
+  "urn:li:schemaField:(urn:li:dataset:(urn:li:dataPlatform:postgres,healthcare.raw.legacy_billing,PROD),member_ssn)": {
+    "urn": "urn:li:schemaField:(urn:li:dataset:(urn:li:dataPlatform:postgres,healthcare.raw.legacy_billing,PROD),member_ssn)",
+    "type": "schemaField",
+    "name": "healthcare.raw.legacy_billing.member_ssn",
+    "platform": "postgres",
+    "subType": "string",
+    "tags": [
+      "PII",
+      "Confidential"
+    ],
+    "terms": [],
+    "owners": [],
+    "properties": {}
+  },
+  "urn:li:dashboard:(looker,revenue_ops)": {
+    "urn": "urn:li:dashboard:(looker,revenue_ops)",
+    "type": "dashboard",
+    "name": "revenue_ops",
+    "platform": "looker",
+    "subType": "Dashboard",
+    "tags": [
+      "Production"
+    ],
+    "terms": [],
+    "owners": [
+      "urn:li:corpuser:morgan.diallo"
+    ],
+    "properties": {}
+  }
+}

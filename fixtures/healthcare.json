@@ -1,0 +1,317 @@
+{
+  "name": "healthcare",
+  "description": "A DataHub-shaped healthcare graph with the same failure modes the sample datapacks plant: PII that escapes its source boundary, certification without ownership, and a stale upstream feeding a live model. Used for offline runs, tests and the example outputs. Aliases below are a fixture-file convenience; the URNs are the real thing.",
+  "baseUrl": "http://localhost:9002",
+  "entities": [
+    {
+      "alias": "raw.patients",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:postgres,healthcare.raw.patients,PROD)",
+      "subType": "Table",
+      "description": "Patient master record, replicated from the EHR.",
+      "tags": ["Source"],
+      "owners": ["urn:li:corpuser:dana.okoro"],
+      "domain": "urn:li:domain:clinical",
+      "fields": [
+        { "path": "patient_id", "type": "string" },
+        { "path": "ssn", "type": "string", "tags": ["PII", "Sensitive"], "description": "Social security number. Never leaves the source boundary unmasked." },
+        { "path": "email", "type": "string", "tags": ["PII"] },
+        { "path": "full_name", "type": "string", "tags": ["PII"] },
+        { "path": "dob", "type": "date", "tags": ["PII", "Sensitive"] },
+        { "path": "created_at", "type": "timestamp" }
+      ]
+    },
+    {
+      "alias": "raw.claims",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:postgres,healthcare.raw.claims,PROD)",
+      "subType": "Table",
+      "description": "Raw claims feed from the payer clearinghouse.",
+      "tags": ["Source"],
+      "owners": ["urn:li:corpuser:sam.reyes"],
+      "domain": "urn:li:domain:claims",
+      "fields": [
+        { "path": "claim_id", "type": "string" },
+        { "path": "member_dob", "type": "date", "tags": ["PII"] },
+        { "path": "amount", "type": "double" },
+        { "path": "provider_id", "type": "string" },
+        { "path": "status", "type": "string" }
+      ]
+    },
+    {
+      "alias": "raw.lab_results",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:postgres,healthcare.raw.lab_results,PROD)",
+      "subType": "Table",
+      "description": "Lab result ingest. Freshness check has been failing since the vendor changed their export schedule.",
+      "tags": ["Stale", "Quality:Failed"],
+      "owners": ["urn:li:corpuser:sam.reyes"],
+      "fields": [
+        { "path": "lab_id", "type": "string" },
+        { "path": "patient_id", "type": "string" },
+        { "path": "result_value", "type": "double" },
+        { "path": "collected_at", "type": "timestamp" }
+      ]
+    },
+    {
+      "alias": "raw.legacy_billing",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:postgres,healthcare.raw.legacy_billing,PROD)",
+      "subType": "Table",
+      "description": "Pre-migration billing system. Scheduled for retirement; still wired into reporting.",
+      "tags": ["Deprecated"],
+      "owners": [],
+      "fields": [
+        { "path": "invoice_id", "type": "string" },
+        { "path": "member_ssn", "type": "string", "tags": ["PII", "Confidential"] },
+        { "path": "amount_due", "type": "double" }
+      ]
+    },
+    {
+      "alias": "stg.patients",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:snowflake,healthcare.staging.stg_patients,PROD)",
+      "subType": "Table",
+      "description": "Staged patient rows. Note: the source PII tags were never propagated here.",
+      "owners": ["urn:li:corpuser:dana.okoro"],
+      "fields": [
+        { "path": "patient_id", "type": "string" },
+        { "path": "ssn", "type": "string" },
+        { "path": "full_name", "type": "string" }
+      ]
+    },
+    {
+      "alias": "stg.patients_masked",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:snowflake,healthcare.staging.stg_patients_masked,PROD)",
+      "subType": "View",
+      "description": "The correct pattern: contact details hashed at the first hop out of the source.",
+      "tags": ["Masked"],
+      "owners": ["urn:li:corpuser:dana.okoro"],
+      "fields": [
+        { "path": "patient_id", "type": "string" },
+        { "path": "email_masked", "type": "string", "tags": ["Masked"] }
+      ]
+    },
+    {
+      "alias": "stg.labs",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:snowflake,healthcare.staging.stg_labs,PROD)",
+      "subType": "Table",
+      "owners": ["urn:li:corpuser:sam.reyes"],
+      "fields": [
+        { "path": "lab_id", "type": "string" },
+        { "path": "patient_id", "type": "string" },
+        { "path": "result_value", "type": "double" }
+      ]
+    },
+    {
+      "alias": "marts.patient_encounters",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:snowflake,healthcare.marts.patient_encounters,PROD)",
+      "subType": "Table",
+      "description": "Encounter fact table. Certified last quarter; the owner has since left.",
+      "tags": ["Certified", "Production"],
+      "owners": [],
+      "domain": "urn:li:domain:clinical",
+      "fields": [
+        { "path": "encounter_id", "type": "string" },
+        { "path": "patient_ssn", "type": "string" },
+        { "path": "provider_id", "type": "string" },
+        { "path": "encounter_date", "type": "date" }
+      ]
+    },
+    {
+      "alias": "marts.patient_360",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:snowflake,healthcare.marts.patient_360,PROD)",
+      "subType": "Table",
+      "description": "The certified patient view every downstream team builds on.",
+      "tags": ["Certified", "Production"],
+      "owners": ["urn:li:corpuser:dana.okoro"],
+      "domain": "urn:li:domain:clinical",
+      "fields": [
+        { "path": "patient_id", "type": "string" },
+        { "path": "latest_result", "type": "double" },
+        { "path": "encounter_count", "type": "int" }
+      ]
+    },
+    {
+      "alias": "marts.claims_enriched",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:snowflake,healthcare.marts.claims_enriched,PROD)",
+      "subType": "Table",
+      "tags": ["Production"],
+      "owners": ["urn:li:corpuser:sam.reyes"],
+      "domain": "urn:li:domain:claims",
+      "fields": [
+        { "path": "claim_id", "type": "string" },
+        { "path": "member_dob", "type": "date" },
+        { "path": "amount", "type": "double" }
+      ]
+    },
+    {
+      "alias": "marts.patient_marketing",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:snowflake,healthcare.marts.patient_marketing,PROD)",
+      "subType": "Table",
+      "owners": ["urn:li:corpuser:priya.raman"],
+      "fields": [
+        { "path": "patient_id", "type": "string" },
+        { "path": "email_masked", "type": "string", "tags": ["Masked"] }
+      ]
+    },
+    {
+      "alias": "marts.billing_rollup",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:snowflake,healthcare.marts.billing_rollup,PROD)",
+      "subType": "Table",
+      "owners": ["urn:li:corpuser:morgan.diallo"],
+      "fields": [
+        { "path": "invoice_id", "type": "string" },
+        { "path": "member_ssn", "type": "string" },
+        { "path": "amount_due", "type": "double" }
+      ]
+    },
+    {
+      "alias": "analytics.encounter_summary",
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:snowflake,healthcare.analytics.encounter_summary,PROD)",
+      "subType": "View",
+      "description": "Reporting view read directly by Looker.",
+      "owners": ["urn:li:corpuser:priya.raman"],
+      "fields": [
+        { "path": "patient_ssn", "type": "string" },
+        { "path": "encounters", "type": "int" },
+        { "path": "encounter_date", "type": "date" }
+      ]
+    },
+    {
+      "alias": "dash.patient_overview",
+      "urn": "urn:li:dashboard:(looker,patient_overview)",
+      "subType": "Dashboard",
+      "description": "Clinical operations dashboard. Shared with the whole care org.",
+      "tags": ["Certified"],
+      "owners": []
+    },
+    {
+      "alias": "chart.claims_by_age",
+      "urn": "urn:li:chart:(looker,claims_by_age)",
+      "subType": "Chart",
+      "description": "Claim volume bucketed by member age.",
+      "owners": ["urn:li:corpuser:sam.reyes"]
+    },
+    {
+      "alias": "dash.campaign_performance",
+      "urn": "urn:li:dashboard:(looker,campaign_performance)",
+      "subType": "Dashboard",
+      "description": "Outreach campaign performance. Reads only hashed contact fields.",
+      "owners": ["urn:li:corpuser:priya.raman"]
+    },
+    {
+      "alias": "dash.revenue_ops",
+      "urn": "urn:li:dashboard:(looker,revenue_ops)",
+      "subType": "Dashboard",
+      "description": "Revenue operations dashboard, still fed by the legacy billing system.",
+      "tags": ["Production"],
+      "owners": ["urn:li:corpuser:morgan.diallo"]
+    },
+    {
+      "alias": "dash.exec_health_kpis",
+      "urn": "urn:li:dashboard:(looker,exec_health_kpis)",
+      "subType": "Dashboard",
+      "description": "Executive KPI board built on the certified patient view.",
+      "tags": ["Certified"],
+      "owners": ["urn:li:corpuser:priya.raman"]
+    }
+  ],
+  "edges": [
+    {
+      "source": "raw.patients:ssn",
+      "target": "stg.patients:ssn",
+      "transform": "passthrough",
+      "query": "INSERT INTO healthcare.staging.stg_patients SELECT patient_id, ssn, full_name FROM healthcare.raw.patients"
+    },
+    {
+      "source": "raw.patients:full_name",
+      "target": "stg.patients:full_name",
+      "transform": "passthrough"
+    },
+    {
+      "source": "stg.patients:ssn",
+      "target": "marts.patient_encounters:patient_ssn",
+      "transform": "join on patient_id",
+      "query": "CREATE TABLE healthcare.marts.patient_encounters AS SELECT e.encounter_id, p.ssn AS patient_ssn, e.provider_id, e.encounter_date FROM encounters e JOIN healthcare.staging.stg_patients p USING (patient_id)"
+    },
+    {
+      "source": "marts.patient_encounters:patient_ssn",
+      "target": "analytics.encounter_summary:patient_ssn",
+      "transform": "passthrough into reporting view",
+      "query": "CREATE VIEW healthcare.analytics.encounter_summary AS SELECT patient_ssn, COUNT(*) AS encounters, encounter_date FROM healthcare.marts.patient_encounters GROUP BY patient_ssn, encounter_date"
+    },
+    {
+      "source": "analytics.encounter_summary",
+      "target": "dash.patient_overview",
+      "transform": "Looker explore: encounter_summary"
+    },
+
+    {
+      "source": "raw.patients:email",
+      "target": "stg.patients_masked:email_masked",
+      "transform": "mask_email",
+      "query": "CREATE VIEW healthcare.staging.stg_patients_masked AS SELECT patient_id, sha2(lower(trim(email)), 256) AS email_masked FROM healthcare.raw.patients"
+    },
+    {
+      "source": "stg.patients_masked:email_masked",
+      "target": "marts.patient_marketing:email_masked",
+      "transform": "passthrough"
+    },
+    {
+      "source": "marts.patient_marketing",
+      "target": "dash.campaign_performance",
+      "transform": "Looker explore: patient_marketing"
+    },
+
+    {
+      "source": "raw.claims:member_dob",
+      "target": "marts.claims_enriched:member_dob",
+      "transform": "passthrough",
+      "query": "CREATE TABLE healthcare.marts.claims_enriched AS SELECT claim_id, member_dob, amount FROM healthcare.raw.claims"
+    },
+    {
+      "source": "marts.claims_enriched",
+      "target": "chart.claims_by_age",
+      "transform": "Looker explore: claims_enriched"
+    },
+
+    {
+      "source": "raw.legacy_billing",
+      "target": "marts.billing_rollup",
+      "transform": "nightly rollup job",
+      "query": "INSERT INTO healthcare.marts.billing_rollup SELECT invoice_id, member_ssn, amount_due FROM healthcare.raw.legacy_billing"
+    },
+    {
+      "source": "marts.billing_rollup",
+      "target": "dash.revenue_ops",
+      "transform": "Looker explore: billing_rollup"
+    },
+
+    {
+      "source": "raw.lab_results",
+      "target": "stg.labs",
+      "transform": "cleanse + dedupe"
+    },
+    {
+      "source": "stg.labs",
+      "target": "marts.patient_360",
+      "transform": "latest result per patient"
+    },
+    {
+      "source": "marts.patient_360",
+      "target": "dash.exec_health_kpis",
+      "transform": "Looker explore: patient_360"
+    }
+  ],
+  "queries": {
+    "raw.patients": [
+      "SELECT ssn, full_name, dob FROM healthcare.raw.patients WHERE created_at > current_date - 30",
+      "SELECT count(*) FROM healthcare.raw.patients"
+    ],
+    "raw.claims": [
+      "SELECT member_dob, amount FROM healthcare.raw.claims WHERE status = 'paid'"
+    ],
+    "raw.legacy_billing": [
+      "SELECT invoice_id, member_ssn, amount_due FROM healthcare.raw.legacy_billing WHERE amount_due > 0"
+    ],
+    "marts.patient_360": [
+      "SELECT patient_id, latest_result FROM healthcare.marts.patient_360"
+    ]
+  }
+}

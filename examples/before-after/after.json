@@ -1,0 +1,105 @@
+{
+  "urn:li:schemaField:(urn:li:dataset:(urn:li:dataPlatform:postgres,healthcare.raw.patients,PROD),ssn)": {
+    "urn": "urn:li:schemaField:(urn:li:dataset:(urn:li:dataPlatform:postgres,healthcare.raw.patients,PROD),ssn)",
+    "type": "schemaField",
+    "name": "healthcare.raw.patients.ssn",
+    "platform": "postgres",
+    "subType": "string",
+    "tags": [
+      "PII",
+      "Sensitive",
+      "policy-violation"
+    ],
+    "terms": [],
+    "owners": [
+      "urn:li:corpuser:dana.okoro"
+    ],
+    "domain": "urn:li:domain:clinical",
+    "properties": {
+      "urn:li:structuredProperty:io.kestrel.policy_violation": "{\"detected_at\": \"2026-08-06T05:36:58+00:00\", \"engine\": \"template\", \"finding_id\": \"pii-reaches-bi-82fa8982\", \"hops\": 4, \"owners\": \"urn:li:corpuser:dana.okoro\", \"path\": \"urn:li:schemaField:(urn:li:dataset:(urn:li:dataPlatform:postgres,healthcare.raw.patients,PROD),ssn) -> urn:li:schemaField:(urn:li:dataset:(urn:li:dataPlatform:snowflake,healthcare.staging.stg_patients,PROD),ssn) -> urn:li:schemaField:(urn:li:dataset:(urn:li:dataPlatform:snowflake,healthcare.marts.patient_encounters,PROD),patient_ssn) -> urn:li:schemaField:(urn:li:dataset:(urn:li:dataPlatform:snowflake,healthcare.analytics.encounter_summary,PROD),patient_ssn) -> urn:li:dashboard:(looker,patient_overview)\", \"policy_id\": \"pii-reaches-bi\", \"scan_run\": \"kestrel-example-run\", \"severity\": \"high\", \"sink_urn\": \"urn:li:dashboard:(looker,patient_overview)\", \"source_urn\": \"urn:li:schemaField:(urn:li:dataset:(urn:li:dataPlatform:postgres,healthcare.raw.patients,PROD),ssn)\", \"summary\": \"healthcare.raw.patients.ssn reaches Dashboard/Chart 'patient_overview' via a 4-hop path, with no mask/hash/sha2 (+4 more) step on the way.\"}"
+    }
+  },
+  "urn:li:dashboard:(looker,patient_overview)": {
+    "urn": "urn:li:dashboard:(looker,patient_overview)",
+    "type": "dashboard",
+    "name": "patient_overview",
+    "platform": "looker",
+    "subType": "Dashboard",
+    "tags": [
+      "Certified",
+      "policy-violation"
+    ],
+    "terms": [],
+    "owners": [],
+    "properties": {
+      "urn:li:structuredProperty:io.kestrel.policy_violation": "{\"detected_at\": \"2026-08-06T05:36:58+00:00\", \"engine\": \"template\", \"finding_id\": \"certified-dashboard-without-owner-3f2ac5ca\", \"policy_id\": \"certified-dashboard-without-owner\", \"scan_run\": \"kestrel-example-run\", \"severity\": \"medium\", \"source_urn\": \"urn:li:dashboard:(looker,patient_overview)\", \"summary\": \"patient_overview is marked Certified but has no owner. Nobody is accountable for it.\"}"
+    }
+  },
+  "urn:li:schemaField:(urn:li:dataset:(urn:li:dataPlatform:postgres,healthcare.raw.claims,PROD),member_dob)": {
+    "urn": "urn:li:schemaField:(urn:li:dataset:(urn:li:dataPlatform:postgres,healthcare.raw.claims,PROD),member_dob)",
+    "type": "schemaField",
+    "name": "healthcare.raw.claims.member_dob",
+    "platform": "postgres",
+    "subType": "date",
+    "tags": [
+      "PII",
+      "policy-violation"
+    ],
+    "terms": [],
+    "owners": [
+      "urn:li:corpuser:sam.reyes"
+    ],
+    "domain": "urn:li:domain:claims",
+    "properties": {
+      "urn:li:structuredProperty:io.kestrel.policy_violation": "{\"detected_at\": \"2026-08-06T05:36:58+00:00\", \"engine\": \"template\", \"finding_id\": \"pii-reaches-bi-15dc0b3c\", \"hops\": 2, \"owners\": \"urn:li:corpuser:sam.reyes\", \"path\": \"urn:li:schemaField:(urn:li:dataset:(urn:li:dataPlatform:postgres,healthcare.raw.claims,PROD),member_dob) -> urn:li:schemaField:(urn:li:dataset:(urn:li:dataPlatform:snowflake,healthcare.marts.claims_enriched,PROD),member_dob) -> urn:li:chart:(looker,claims_by_age)\", \"policy_id\": \"pii-reaches-bi\", \"scan_run\": \"kestrel-example-run\", \"severity\": \"high\", \"sink_urn\": \"urn:li:chart:(looker,claims_by_age)\", \"source_urn\": \"urn:li:schemaField:(urn:li:dataset:(urn:li:dataPlatform:postgres,healthcare.raw.claims,PROD),member_dob)\", \"summary\": \"healthcare.raw.claims.member_dob reaches Dashboard/Chart 'claims_by_age' via a 2-hop path, with no mask/hash/sha2 (+4 more) step on the way.\"}"
+    }
+  },
+  "urn:li:chart:(looker,claims_by_age)": {
+    "urn": "urn:li:chart:(looker,claims_by_age)",
+    "type": "chart",
+    "name": "claims_by_age",
+    "platform": "looker",
+    "subType": "Chart",
+    "tags": [
+      "policy-violation"
+    ],
+    "terms": [],
+    "owners": [
+      "urn:li:corpuser:sam.reyes"
+    ],
+    "properties": {}
+  },
+  "urn:li:schemaField:(urn:li:dataset:(urn:li:dataPlatform:postgres,healthcare.raw.legacy_billing,PROD),member_ssn)": {
+    "urn": "urn:li:schemaField:(urn:li:dataset:(urn:li:dataPlatform:postgres,healthcare.raw.legacy_billing,PROD),member_ssn)",
+    "type": "schemaField",
+    "name": "healthcare.raw.legacy_billing.member_ssn",
+    "platform": "postgres",
+    "subType": "string",
+    "tags": [
+      "PII",
+      "Confidential",
+      "policy-violation"
+    ],
+    "terms": [],
+    "owners": [],
+    "properties": {
+      "urn:li:structuredProperty:io.kestrel.policy_violation": "{\"detected_at\": \"2026-08-06T05:36:58+00:00\", \"engine\": \"template\", \"finding_id\": \"pii-reaches-bi-6580a708\", \"hops\": 2, \"owners\": \"urn:li:corpuser:morgan.diallo\", \"path\": \"urn:li:schemaField:(urn:li:dataset:(urn:li:dataPlatform:postgres,healthcare.raw.legacy_billing,PROD),member_ssn) -> urn:li:dataset:(urn:li:dataPlatform:snowflake,healthcare.marts.billing_rollup,PROD) -> urn:li:dashboard:(looker,revenue_ops)\", \"policy_id\": \"pii-reaches-bi\", \"scan_run\": \"kestrel-example-run\", \"severity\": \"high\", \"sink_urn\": \"urn:li:dashboard:(looker,revenue_ops)\", \"source_urn\": \"urn:li:schemaField:(urn:li:dataset:(urn:li:dataPlatform:postgres,healthcare.raw.legacy_billing,PROD),member_ssn)\", \"summary\": \"healthcare.raw.legacy_billing.member_ssn reaches Dashboard/Chart 'revenue_ops' via a 2-hop path, with no mask/hash/sha2 (+4 more) step on the way.\"}"
+    }
+  },
+  "urn:li:dashboard:(looker,revenue_ops)": {
+    "urn": "urn:li:dashboard:(looker,revenue_ops)",
+    "type": "dashboard",
+    "name": "revenue_ops",
+    "platform": "looker",
+    "subType": "Dashboard",
+    "tags": [
+      "Production",
+      "policy-violation"
+    ],
+    "terms": [],
+    "owners": [
+      "urn:li:corpuser:morgan.diallo"
+    ],
+    "properties": {}
+  }
+}

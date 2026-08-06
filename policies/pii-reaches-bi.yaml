@@ -1,0 +1,30 @@
+# The headline policy, and the reason Kestrel exists.
+#
+# DataHub Metadata Tests ask questions about one entity: "does this column have
+# a PII tag?". They cannot ask "does this PII column REACH a dashboard, through
+# any path, without being masked on the way" -- that is a condition over the
+# lineage graph, not over an entity.
+#
+# This file is that question, written down.
+- id: pii-reaches-bi
+  severity: high
+  description: >-
+    A column tagged PII must not reach a BI dashboard or chart through any
+    lineage path, unless it passes through a masking, hashing or redaction step.
+  subject:
+    entity_type: column
+    has_any_tag: [PII, Sensitive, Confidential]
+  condition:
+    lineage_reaches_type: [Dashboard, Chart]
+    direction: downstream
+    max_hops: 6
+    # A path that launders the value on the way is not a violation. Matched as a
+    # regex against intermediate asset names, transform text and observed SQL.
+    without_step: "mask|masked|hash|sha2|redact|anonymi[sz]|tokeni[sz]|pseudonym"
+    # ...or against an explicit tag a data engineer put on the mitigating step.
+    without_tag: [Masked, Anonymized]
+  on_violation: [tag, structured_property, document, notify]
+  remediation: >-
+    Mask or hash the column at the first transform downstream of the source, or
+    drop it from the downstream model. If the exposure is reviewed and accepted,
+    tag the mitigating step `Masked` so this policy stops reporting the path.

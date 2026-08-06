@@ -1,0 +1,21 @@
+# The second lineage-path rule, walking the graph the other way.
+#
+# Certification is a claim about an asset. This asks whether the claim survives
+# contact with everything the asset depends on -- again, a multi-hop question.
+- id: stale-upstream-feeds-live
+  severity: high
+  description: >-
+    A Certified or Production asset must not depend on an upstream that is
+    tagged Stale, Deprecated or Quality:Failed, anywhere within 4 hops.
+  subject:
+    entity_type: dataset
+    has_any_tag: [Certified, Production]
+  condition:
+    upstream_has_tag: [Stale, Deprecated, "Quality:Failed"]
+    direction: upstream
+    max_hops: 4
+  on_violation: [tag, structured_property, document, pr]
+  remediation: >-
+    Refresh or repair the flagged upstream before it feeds a certified asset,
+    or drop the certification until the dependency is healthy. If the upstream
+    is being retired, cut the dependency rather than inheriting its decay.
