@@ -200,8 +200,22 @@ def render(
         for violation in violations:
             console.print(violation_panel(violation, report.datahub_url))
     else:
-        console.print(Rule("clean", style="green"))
-        console.print(Text("  No violations. Every policy passed.", style="green"))
+        errored = [r for r in report.results if r.error]
+        if errored:
+            # "No violations" is only true if the policies actually ran. Saying
+            # it after every one errored is the worst failure this tool has: a
+            # green light over a catalog nobody successfully read.
+            console.print(Rule("incomplete", style="yellow"))
+            console.print(
+                Text(
+                    f"  No violations found, but {len(errored)} of {len(report.results)} "
+                    "policies errored -- this is NOT a pass.",
+                    style="bold yellow",
+                )
+            )
+        else:
+            console.print(Rule("clean", style="green"))
+            console.print(Text("  No violations. Every policy passed.", style="green"))
     console.print()
 
     notes = [n for r in report.results for n in r.notes]

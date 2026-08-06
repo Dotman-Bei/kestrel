@@ -50,6 +50,50 @@ READ_TOOLS = (
     "list_schema_fields",
     "get_dataset_queries",
 )
+def _schema_properties(schema: Dict[str, Any]) -> Dict[str, Any]:
+    """The parameter properties a tool advertises, through one level of indirection.
+
+    Pydantic-generated JSON Schema often puts the real properties behind a
+    ``$ref`` into ``$defs``, or splits them across ``allOf``/``anyOf``, leaving
+    nothing at the top level. Reading ``properties`` directly then yields {} and
+    every later bind fails with "this tool accepts no parameters", which is both
+    wrong and hard to trace back to here.
+    """
+    if not isinstance(schema, dict):
+        return {}
+
+    props = schema.get("properties")
+    if isinstance(props, dict) and props:
+        return props
+
+    defs = schema.get("$defs") or schema.get("definitions") or {}
+    ref = schema.get("$ref")
+    if isinstance(ref, str) and ref.startswith("#/"):
+        node = schema
+        for part in ref.lstrip("#/").split("/"):
+            node = node.get(part) if isinstance(node, dict) else None
+            if node is None:
+                break
+        if isinstance(node, dict):
+            found = _schema_properties(node)
+            if found:
+                return found
+
+    for key in ("allOf", "anyOf", "oneOf"):
+        for member in schema.get(key) or []:
+            if isinstance(member, dict):
+                found = _schema_properties(member)
+                if found:
+                    return found
+
+    if isinstance(defs, dict) and len(defs) == 1:
+        only = next(iter(defs.values()))
+        if isinstance(only, dict):
+            return _schema_properties(only)
+
+    return {}
+
+
 WRITE_TOOLS = ("add_tags", "remove_tags", "add_structured_properties", "save_document")
 
 
@@ -284,7 +328,14 @@ class McpCatalog(Catalog):
 
         self._session = session
         for tool in listing.tools:
-            schema = getattr(tool, "inputSchema", None) or {}
+            # The MCP SDK renamed this attribute from camelCase to snake_case;
+            # read both, because getattr with a default silently yields {} on the
+            # wrong one -- which looks like "this server advertises no parameters"
+            # and fails much later, at bind time, with a misleading message.
+            schema = getattr(tool, "input_schema", None)
+            if schema is None:
+                schema = getattr(tool, "inputSchema", None)
+            schema = schema or {}
             self._schemas[tool.name] = schema if isinstance(schema, dict) else {}
 
         missing_reads = [t for t in ("search", "get_lineage") if t not in self._schemas]
@@ -366,7 +417,7 @@ class McpCatalog(Catalog):
     # ---------------------------------------------------------- tool calls
 
     def _schema_keys(self, tool: str) -> List[str]:
-        return list((self._schemas.get(tool) or {}).get("properties", {}).keys())
+        return list(_schema_properties(self._schemas.get(tool) or {}).keys())
 
     def _bind(self, tool: str, candidates: Sequence[str], value: Any, args: Dict[str, Any]) -> bool:
         """Set ``value`` under whichever candidate name this server declares."""
