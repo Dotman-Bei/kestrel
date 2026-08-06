@@ -32,8 +32,8 @@ kestrel = "policy_sentinel.cli:main"
 sentinel = "policy_sentinel.cli:main"
 
 [project.urls]
-Homepage = "https://github.com/kestrel-sentinel/kestrel"
-Repository = "https://github.com/kestrel-sentinel/kestrel"
+Homepage = "https://github.com/Dotman-Bei/kestrel"
+Repository = "https://github.com/Dotman-Bei/kestrel"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/policy_sentinel"]

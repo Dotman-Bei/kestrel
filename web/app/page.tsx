@@ -265,7 +265,7 @@ export default function Home() {
                 See a real scan
               </Link>
               <a
-                href="https://github.com/kestrel-sentinel/kestrel"
+                href="https://github.com/Dotman-Bei/kestrel"
                 className="btn-press bg-surface"
                 style={{ boxShadow: "5px 5px 0 0 var(--color-signal-dim)" }}
               >

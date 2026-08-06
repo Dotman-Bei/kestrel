@@ -74,7 +74,7 @@ Metadata Tests are good at what they do, and Kestrel ships a per-entity rule (`c
 ## Install
 
 ```bash
-git clone https://github.com/kestrel-sentinel/kestrel
+git clone https://github.com/Dotman-Bei/kestrel
 cd kestrel
 pip install -e .            # or: pip install -e ".[agent]" for the agentic engine
 ```
