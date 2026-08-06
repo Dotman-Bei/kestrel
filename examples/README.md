@@ -19,6 +19,7 @@ generated report says so in its `warnings`.
 | [`before-after/`](before-after/) | What the run changed in the catalog — tags and structured properties, per entity, before and after. |
 | [`remediation-pr.md`](remediation-pr.md) | The pull request Kestrel drafts for a fixable finding. |
 | [`owner-notification.md`](owner-notification.md) | The owner ping it drafts. |
+| [`agent-compiled/`](agent-compiled/) | A policy the **agent wrote itself** from a plain-English rule, plus the violation it then found. |
 
 ## What the run found
 

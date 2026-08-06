@@ -1,0 +1,11 @@
+- id: dashboard-no-deprecated-upstream
+  severity: high
+  description: ''
+  subject:
+    entity_type: dashboard
+  condition:
+    upstream_has_tag: Deprecated
+  on_violation:
+  - tag
+  - structured_property
+  - document

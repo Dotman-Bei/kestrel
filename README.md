@@ -100,11 +100,13 @@ Every report from offline mode is stamped `mode: offline` and carries a warning.
 **1. Start DataHub and load sample data**
 
 ```bash
-pip install acryl-datahub
+pip install acryl-datahub uv
 datahub docker quickstart
 datahub datapack load showcase-ecommerce      # a broad graph
 # the `healthcare` datapack plants PII and quality issues — the demo target
 ```
+
+Kestrel drives `uvx mcp-server-datahub` to talk to DataHub, so `uv` is required.
 
 **2. Point Kestrel at it, with writes enabled**
 
@@ -135,6 +137,18 @@ kestrel scan --live --write --json out/report.json --md out/report.md
 `--write` is opt-in. Without it you get the full report and the incident documents on disk, and nothing is mutated.
 
 Kestrel drives `uvx mcp-server-datahub` by default; override with `--mcp-command` or `KESTREL_MCP_COMMAND`.
+
+### Live mode status
+
+**Verified against DataHub v1.7.0:**
+- MCP server connection, tool enumeration, and write-tool availability (`add_tags`, `add_structured_properties`, `save_document`)
+- All four shipped policies execute without error against a live catalog
+- The three-layer write-back design (tags, structured properties, documents) matches the tools the OSS server actually exposes
+
+**Not verified:**
+- An actual violation found and written back live. The `showcase-ecommerce` sample datapack has no PII-tagged columns, so the headline `pii-reaches-bi` policy correctly found nothing to report.
+
+The offline mode and committed `examples/` show real violations with correct multi-hop paths. A live violation requires either manual tagging in the DataHub UI or a datapack with column-level tags already present.
 
 ---
 
@@ -199,6 +213,8 @@ kestrel scan --ask "no dashboard should depend on a deprecated table" \
 **Phase 2 — investigate.** For rules the DSL cannot express, Claude plans its own reads — `search`, `get_lineage`, `list_columns`, `get_queries` — walks the graph, and reports what it finds. Every tool call is recorded, so the report shows the read plan it chose, not just its conclusion. Reported findings are validated against the catalog: a URN the agent invented is rejected rather than reported.
 
 Needs `ANTHROPIC_API_KEY` and `pip install -e ".[agent]"`. **The template engine is deliberately LLM-free** — the core enforcement path cannot flake, and the agent is additive.
+
+A real compile-phase run — the rule typed, the policy file it produced, and the violation that came back — is committed under [`examples/agent-compiled/`](examples/agent-compiled/).
 
 ---
 
