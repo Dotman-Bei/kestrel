@@ -8,6 +8,7 @@ import {
   POLICY_TONE,
   allViolations,
   entityKind,
+  prose,
   report,
   shortName,
   type Violation,
@@ -32,12 +33,13 @@ const WRITE_LABEL = {
 
 function Stat({ label, value, accent }: { label: string; value: string; accent?: boolean }) {
   return (
-    <div>
+    <div className="min-w-0">
       <p className="data-label">{label}</p>
       <p
-        className={`mt-1.5 font-display text-[32px] font-extrabold leading-none tracking-[-0.02em] ${
+        className={`mt-1.5 font-display font-extrabold leading-none tracking-[-0.02em] ${
           accent ? "text-signal" : "text-void"
         }`}
+        style={{ fontSize: "clamp(24px, 5.5vw, 32px)" }}
       >
         {value}
       </p>
@@ -74,7 +76,7 @@ function WriteBackRow({ write }: { write: WriteBack }) {
       </span>
       <span className="min-w-0">
         <span className="data-label mr-2 text-void">{WRITE_LABEL[write.kind] ?? write.kind}</span>
-        <span className="text-[13px] text-muted">{write.detail}</span>
+        <span className="text-[13px] break-words text-muted">{prose(write.detail)}</span>
         <span
           className={`ml-2 font-mono text-[10.5px] uppercase tracking-[0.08em] ${
             write.applied ? "text-muted-2" : "text-signal"
@@ -149,16 +151,26 @@ export function ScanDashboard() {
 
       {report.warnings?.length ? (
         <Reveal index={1}>
-          <p className="mt-6 rounded-[12px] border-2 border-void bg-sand px-4 py-3 text-[13px] leading-relaxed text-void">
-            <span className="data-label mr-2 text-void">Note</span>
-            {report.warnings[0]}
-          </p>
+          {/* The provenance banner. It carries the same border + hard offset
+              shadow as every other object in the system, and caps its measure
+              so it never becomes a full-bleed strip of 13px text on a wide
+              monitor. `sand` because this is the same categorical tone the
+              mode chip uses for offline. */}
+          <div
+            className="mt-6 flex max-w-[68ch] flex-col gap-1.5 rounded-[12px] border-2 border-void bg-sand px-4 py-3 min-[560px]:flex-row min-[560px]:items-baseline min-[560px]:gap-3"
+            style={{ boxShadow: "4px 4px 0 0 var(--color-brut-line)" }}
+          >
+            <span className="data-label shrink-0 text-void">Provenance</span>
+            <p className="text-[13px] leading-relaxed text-void">
+              {prose(report.warnings[0])}
+            </p>
+          </div>
         </Reveal>
       ) : null}
 
       {/* ------------------------------------------------------ stat row */}
       <Reveal index={2}>
-        <div className="surface-card mt-8 grid grid-cols-2 gap-8 p-8 min-[900px]:grid-cols-5">
+        <div className="surface-card mt-8 grid grid-cols-2 gap-6 p-5 min-[560px]:grid-cols-3 min-[560px]:gap-8 min-[560px]:p-7 min-[900px]:grid-cols-5 min-[900px]:p-8">
           <Stat label="Violations" value={String(report.summary.violations)} accent />
           <Stat label="Policies" value={String(report.summary.policies)} />
           <Stat label="Subjects" value={String(report.summary.subjectsScanned)} />
@@ -178,7 +190,10 @@ export function ScanDashboard() {
 
       {/* ------------------------------------------------ pill switcher */}
       <Reveal index={4}>
-        <div className="mt-10 -mx-5 flex gap-3 overflow-x-auto px-5 pb-3">
+        {/* Full-bleed horizontal scroll: the negative margin and padding must
+            stay in step with the page gutter in app/dashboard/page.tsx, or the
+            first pill clips at the viewport edge. */}
+        <div className="mt-10 -mx-4 flex gap-3 overflow-x-auto px-4 pb-3 min-[560px]:-mx-6 min-[560px]:px-6 min-[900px]:-mx-8 min-[900px]:px-8">
           <PolicyPill
             id="all"
             label="All findings"
@@ -211,8 +226,8 @@ export function ScanDashboard() {
 
         {shown.map((violation, i) => (
           <Reveal key={violation.id} index={Math.min(i, 4)}>
-            <article className="surface-card p-8">
-              <div className="flex flex-wrap items-center gap-3">
+            <article className="surface-card p-5 min-[560px]:p-7 min-[900px]:p-8">
+              <div className="flex flex-wrap items-center gap-2 min-[560px]:gap-3">
                 <SeverityChip severity={violation.severity} />
                 <span
                   className={`rounded-full border-2 border-void ${
@@ -226,14 +241,19 @@ export function ScanDashboard() {
                     agent
                   </span>
                 )}
-                <span className="machine ml-auto">{violation.id}</span>
+                <span className="machine w-full break-all min-[560px]:ml-auto min-[560px]:w-auto min-[560px]:break-normal">
+                  {violation.id}
+                </span>
               </div>
 
-              <p className="mt-6 max-w-[70ch] font-display text-[20px] font-semibold leading-snug tracking-[-0.01em] text-void">
-                {violation.message}
+              <p
+                className="mt-6 max-w-[70ch] font-display font-semibold leading-snug tracking-[-0.01em] text-void"
+                style={{ fontSize: "clamp(17px, 3.6vw, 20px)" }}
+              >
+                {prose(violation.message)}
               </p>
 
-              <div className="mt-7 grid grid-cols-1 gap-6 border-y border-border py-6 min-[900px]:grid-cols-3">
+              <div className="mt-7 grid grid-cols-1 gap-6 border-y border-border py-6 min-[640px]:grid-cols-2 min-[900px]:grid-cols-3">
                 <AssetRef
                   label="Subject"
                   urn={violation.subject.urn}
@@ -275,7 +295,7 @@ export function ScanDashboard() {
 
               {violation.rationale && (
                 <p className="mt-7 border-l-2 border-signal pl-4 text-[13.5px] italic leading-relaxed text-muted">
-                  {violation.rationale}
+                  {prose(violation.rationale)}
                 </p>
               )}
 
@@ -294,7 +314,7 @@ export function ScanDashboard() {
                 <div className="mt-8 rounded-[12px] bg-void-3 px-5 py-4">
                   <p className="data-label">Suggested fix</p>
                   <p className="mt-2 text-[13.5px] leading-relaxed text-muted">
-                    {violation.remediation}
+                    {prose(violation.remediation)}
                   </p>
                 </div>
               )}

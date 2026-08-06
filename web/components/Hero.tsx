@@ -42,12 +42,12 @@ export function Hero() {
   return (
     <section
       ref={ref}
-      className="relative flex min-h-screen items-center overflow-hidden px-6 pb-[60px] pt-[100px]"
+      className="relative flex min-h-[100svh] items-center overflow-hidden px-5 pb-[60px] pt-[110px] min-[560px]:px-6 min-[900px]:pt-[100px]"
     >
       <LineageCanvas />
       <FloatingChips />
 
-      <div className="relative mx-auto grid w-full max-w-[1180px] grid-cols-1 items-center gap-14 min-[900px]:grid-cols-[1.05fr_0.95fr]">
+      <div className="relative mx-auto grid w-full max-w-[1180px] grid-cols-1 items-center gap-12 min-[900px]:grid-cols-[1.05fr_0.95fr] min-[900px]:gap-14">
         <div className="text-center min-[900px]:text-left">
           <p data-hero-in className="eyebrow" style={{ opacity: 0 }}>
             DataHub · MCP · Policy as code
@@ -97,10 +97,12 @@ export function Hero() {
           </p>
         </div>
 
-        {/* The terminal: the product's actual output, not a mockup of one. */}
-        <div data-hero-in style={{ opacity: 0 }} className="hidden min-[900px]:block">
+        {/* The terminal: the product's actual output, not a mockup of one.
+            Shown from 640px up — below that the 11.5px mono would need to
+            shrink past legibility, so the copy carries the hero alone. */}
+        <div data-hero-in style={{ opacity: 0 }} className="hidden min-[640px]:block">
           <div
-            className="rounded-2xl border-2 border-void bg-void p-6"
+            className="rounded-2xl border-2 border-void bg-void p-5 min-[900px]:p-6"
             style={{ boxShadow: "7px 7px 0 0 var(--color-brut-line)" }}
           >
             <div className="flex items-center gap-2 pb-4">

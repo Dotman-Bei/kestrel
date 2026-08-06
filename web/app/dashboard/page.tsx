@@ -19,7 +19,7 @@ export default function DashboardPage() {
     <div className="relative flex min-h-full flex-1 flex-col bg-page">
       <GrainOverlay />
       <TopBar unread={report.summary.violations} />
-      <main className="flex-1 px-5 pb-10 pt-8">
+      <main className="flex-1 px-4 pb-10 pt-8 min-[560px]:px-6 min-[900px]:px-8">
         <ScanDashboard />
       </main>
     </div>

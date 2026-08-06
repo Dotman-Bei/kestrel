@@ -88,7 +88,7 @@ export default function Home() {
         <Hero />
 
         {/* ------------------------------------------------- the gap ----- */}
-        <section id="gap" className="scroll-mt-28 mx-auto max-w-[1180px] px-6 pb-[90px] pt-[60px] min-[900px]:px-12">
+        <section id="gap" className="scroll-mt-28 mx-auto max-w-[1180px] px-5 pb-[70px] pt-[50px] min-[560px]:px-6 min-[900px]:px-12 min-[900px]:pb-[90px] min-[900px]:pt-[60px]">
           <Reveal>
             <p className="eyebrow">The originality question, answered first</p>
             <h2
@@ -99,11 +99,11 @@ export default function Home() {
             </h2>
           </Reveal>
 
-          <div className="mt-12 grid grid-cols-1 gap-7 min-[900px]:grid-cols-2">
+          <div className="mt-10 grid grid-cols-1 gap-7 min-[900px]:mt-12 min-[900px]:grid-cols-2">
             {GAP.map((column, i) => (
               <Reveal key={column.label} index={i}>
                 <div
-                  className={`h-full rounded-[20px] border-2 border-void ${column.tone} p-8`}
+                  className={`h-full rounded-[20px] border-2 border-void ${column.tone} p-6 min-[560px]:p-8`}
                   style={{ boxShadow: "6px 6px 0 0 var(--color-brut-line)" }}
                 >
                   <p className="data-label text-void/60">{column.label}</p>
@@ -125,7 +125,7 @@ export default function Home() {
         </section>
 
         {/* ------------------------------------------------ the thesis --- */}
-        <section className="mx-auto max-w-[1180px] px-6 pb-[70px] pt-[40px] text-center min-[900px]:px-12">
+        <section className="mx-auto max-w-[1180px] px-5 pb-[60px] pt-[30px] text-center min-[560px]:px-6 min-[900px]:px-12 min-[900px]:pb-[70px] min-[900px]:pt-[40px]">
           <Reveal>
             <p className="eyebrow">One violation, drawn</p>
             <h2
@@ -140,7 +140,7 @@ export default function Home() {
             </p>
           </Reveal>
 
-          <div className="mt-14">
+          <div className="mt-10 min-[900px]:mt-14">
             <ThesisDiagram />
           </div>
 
@@ -153,11 +153,11 @@ export default function Home() {
         </section>
 
         {/* ------------------------------------------------- problems ---- */}
-        <section className="mx-auto max-w-[1180px] px-6 pb-[90px] pt-[60px] min-[900px]:px-12">
+        <section className="mx-auto max-w-[1180px] px-5 pb-[70px] pt-[50px] min-[560px]:px-6 min-[900px]:px-12 min-[900px]:pb-[90px] min-[900px]:pt-[60px]">
           <Reveal>
             <p className="eyebrow">Why nobody catches this</p>
           </Reveal>
-          <div className="mt-12 grid grid-cols-1 gap-x-20 gap-y-12 min-[900px]:grid-cols-2">
+          <div className="mt-10 grid grid-cols-1 gap-x-12 gap-y-10 min-[900px]:mt-12 min-[900px]:grid-cols-2 min-[900px]:gap-x-20 min-[900px]:gap-y-12">
             {PROBLEMS.map((problem, i) => (
               <Reveal key={problem.title} index={i}>
                 <h3 className="font-display text-[21px] font-semibold leading-snug tracking-[-0.01em] text-void">
@@ -170,7 +170,7 @@ export default function Home() {
         </section>
 
         {/* ------------------------------------------------- policies ---- */}
-        <section id="policies" className="scroll-mt-28 mx-auto max-w-[1180px] px-6 pb-[90px] pt-[70px] min-[900px]:px-12">
+        <section id="policies" className="scroll-mt-28 mx-auto max-w-[1180px] px-5 pb-[70px] pt-[55px] min-[560px]:px-6 min-[900px]:px-12 min-[900px]:pb-[90px] min-[900px]:pt-[70px]">
           <Reveal>
             <p className="eyebrow">The four rules</p>
             <h2
@@ -191,7 +191,7 @@ export default function Home() {
         </section>
 
         {/* ------------------------------------------------ write-back --- */}
-        <section id="writeback" className="scroll-mt-28 mx-auto max-w-[1180px] px-6 pb-[90px] pt-[60px] min-[900px]:px-12">
+        <section id="writeback" className="scroll-mt-28 mx-auto max-w-[1180px] px-5 pb-[70px] pt-[50px] min-[560px]:px-6 min-[900px]:px-12 min-[900px]:pb-[90px] min-[900px]:pt-[60px]">
           <Reveal>
             <p className="eyebrow">What lands in DataHub</p>
             <h2
@@ -206,11 +206,11 @@ export default function Home() {
             </p>
           </Reveal>
 
-          <div className="mt-12 grid grid-cols-1 gap-7 min-[900px]:grid-cols-3">
+          <div className="mt-10 grid grid-cols-1 gap-7 min-[640px]:grid-cols-2 min-[900px]:mt-12 min-[900px]:grid-cols-3">
             {LAYERS.map((layer, i) => (
               <Reveal key={layer.n} index={i}>
                 <div
-                  className={`h-full rounded-[20px] border-2 border-void ${layer.tone} p-8`}
+                  className={`h-full rounded-[20px] border-2 border-void ${layer.tone} p-6 min-[560px]:p-8`}
                   style={{ boxShadow: "6px 6px 0 0 var(--color-brut-line)" }}
                 >
                   <p className="font-mono text-[13px] font-medium tracking-[0.08em] text-void/55">
@@ -236,8 +236,8 @@ export default function Home() {
         </section>
 
         {/* ---------------------------------------------------- the loop - */}
-        <section className="mx-auto max-w-[1180px] px-6 pb-[100px] pt-[40px] min-[900px]:px-12">
-          <div className="grid grid-cols-1 gap-7 min-[900px]:grid-cols-3">
+        <section className="mx-auto max-w-[1180px] px-5 pb-[80px] pt-[30px] min-[560px]:px-6 min-[900px]:px-12 min-[900px]:pb-[100px] min-[900px]:pt-[40px]">
+          <div className="grid grid-cols-1 gap-7 min-[640px]:grid-cols-3">
             {LOOP.map((item, i) => (
               <Reveal key={item.step} index={i}>
                 <div className="border-t-2 border-void pt-5">
@@ -252,7 +252,7 @@ export default function Home() {
         </section>
 
         {/* ------------------------------------------------------- close - */}
-        <section className="mx-auto max-w-[1180px] px-6 pb-[70px] text-center min-[900px]:px-12">
+        <section className="mx-auto max-w-[1180px] px-5 pb-[60px] text-center min-[560px]:px-6 min-[900px]:px-12 min-[900px]:pb-[70px]">
           <Reveal>
             <h2
               className="mx-auto max-w-[20ch] font-display font-extrabold leading-[1.05] tracking-[-0.02em]"
@@ -276,16 +276,19 @@ export default function Home() {
         </section>
       </main>
 
-      <footer className="overflow-hidden border-t border-border px-6 pb-10 pt-16 min-[900px]:px-12">
+      <footer className="overflow-hidden border-t border-border px-5 pb-10 pt-14 min-[560px]:px-6 min-[900px]:px-12 min-[900px]:pt-16">
         <div className="mx-auto max-w-[1180px]">
+          {/* Decorative. The lower clamp bound is 44px rather than 72px so the
+              seven glyphs still fit inside a 320px viewport — above that the
+              wordmark was being clipped mid-letter by the overflow guard. */}
           <p
             aria-hidden
             className="select-none font-display font-extrabold leading-[0.9] tracking-[-0.03em] text-void/10"
-            style={{ fontSize: "clamp(72px, 15vw, 200px)" }}
+            style={{ fontSize: "clamp(44px, 15vw, 200px)" }}
           >
             KESTREL
           </p>
-          <div className="mt-8 flex flex-col gap-3 min-[900px]:flex-row min-[900px]:items-center min-[900px]:justify-between">
+          <div className="mt-8 flex flex-col gap-3 min-[640px]:flex-row min-[640px]:items-center min-[640px]:justify-between">
             <p className="data-label">Kestrel · Policy Sentinel · Apache 2.0</p>
             <p className="data-label">
               DataHub · MCP Server · Multi-hop lineage · Write-back

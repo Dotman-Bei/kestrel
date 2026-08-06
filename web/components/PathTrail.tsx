@@ -1,5 +1,5 @@
 import type { LineagePath } from "@/lib/report";
-import { entityKind, shortName } from "@/lib/report";
+import { entityKind, prose, shortName } from "@/lib/report";
 
 /**
  * The evidence, rendered.
@@ -15,14 +15,14 @@ export function PathTrail({ path }: { path: LineagePath }) {
         {path.nodes.map((node, i) => {
           const last = i === path.nodes.length - 1;
           return (
-            <span key={node.urn} className="flex items-center gap-2">
+            <span key={node.urn} className="flex min-w-0 max-w-full items-center gap-2">
               {i > 0 && (
                 <span aria-hidden className="font-mono text-[13px] text-signal">
                   &rarr;
                 </span>
               )}
               <span
-                className={`inline-flex items-center gap-2 rounded-full border-2 border-void px-3 py-[5px] font-mono text-[12px] ${
+                className={`inline-flex min-w-0 max-w-full flex-wrap items-center gap-x-2 rounded-full border-2 border-void px-3 py-[5px] font-mono text-[12px] break-all ${
                   last ? "bg-signal text-surface" : i === 0 ? "bg-blush text-void" : "bg-surface text-void"
                 }`}
                 style={{ boxShadow: "3px 3px 0 0 var(--color-brut-line)" }}
@@ -60,7 +60,7 @@ export function PathTrail({ path }: { path: LineagePath }) {
 
       {path.notes?.map((note) => (
         <p key={note} className="mt-4 font-mono text-[11px] leading-relaxed text-muted-2">
-          note: {note}
+          note: {prose(note)}
         </p>
       ))}
     </div>

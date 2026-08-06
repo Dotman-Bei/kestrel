@@ -145,3 +145,17 @@ export function entityKind(entity?: Entity): string {
   if (!entity) return "";
   return entity.subType || entity.type;
 }
+
+/**
+ * Typeset CLI prose for the web.
+ *
+ * The Python side writes ASCII `--` on purpose — it has to survive a Windows
+ * cp1252 console without raising UnicodeEncodeError. HTML has no such excuse,
+ * so the dash is promoted at render time. Normalising here rather than in the
+ * generator keeps the terminal safe and the page correct, and it covers every
+ * string the CLI emits (warnings, notes, descriptions) rather than the three
+ * that happen to contain one today.
+ */
+export function prose(text: string): string {
+  return text.replace(/ -- /g, " — ");
+}

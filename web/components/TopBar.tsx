@@ -8,7 +8,7 @@ import { Bell } from "lucide-react";
  */
 export function TopBar({ unread = 0 }: { unread?: number }) {
   return (
-    <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-border bg-page/80 px-5 backdrop-blur-md">
+    <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-border bg-page/80 px-4 backdrop-blur-md min-[560px]:px-6 min-[900px]:px-8">
       <Link
         href="/"
         aria-label="Kestrel home"
